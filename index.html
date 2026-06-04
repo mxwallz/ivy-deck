@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ivy Brothers — Growth Partnership Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --forest:#0b1a10;
+      --forest-mid:#152b1c;
+      --forest-light:#1e3d28;
+      --green:#3a8c57;
+      --green-bright:#4db36e;
+      --cream:#f7f4ee;
+      --white:#ffffff;
+      --text-dark:#141c26;
+      --text-mid:#3d4a55;
+      --text-muted:#6b7280;
+    }
+    html,body{height:100%;overflow:hidden;font-family:'Inter',-apple-system,sans-serif;background:var(--forest);color:var(--cream);}
+
+    /* ── SLIDES ── */
+    .deck{width:100%;height:100vh;position:relative;}
+    .slide{
+      position:absolute;inset:0;
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
+      padding:60px 80px;
+      opacity:0;pointer-events:none;
+      transition:opacity .35s ease;
+      text-align:center;
+    }
+    .slide.active{opacity:1;pointer-events:all;}
+
+    /* slide variants */
+    .slide.dark{background:var(--forest);}
+    .slide.mid{background:var(--forest-mid);}
+    .slide.light{background:var(--cream);color:var(--text-dark);}
+    .slide.white{background:var(--white);color:var(--text-dark);}
+    .slide.green-bg{background:var(--green);color:#fff;}
+    .slide.red-bg{background:#1a0505;color:var(--cream);}
+
+    /* ── NAV ── */
+    .nav{
+      position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+      display:flex;align-items:center;gap:16px;z-index:100;
+    }
+    .nav button{
+      background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+      color:#fff;padding:10px 22px;border-radius:100px;
+      font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+      font-family:'Inter',sans-serif;
+    }
+    .nav button:hover{background:rgba(255,255,255,.2);}
+    .nav button.on-light{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.15);color:var(--text-dark);}
+    .nav button.on-light:hover{background:rgba(0,0,0,.14);}
+    .progress{
+      display:flex;gap:6px;
+    }
+    .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .2s;}
+    .dot.active{background:var(--green-bright);}
+    .dot.on-light{background:rgba(0,0,0,.15);}
+    .dot.on-light.active{background:var(--green);}
+
+    /* slide num */
+    .slide-num{
+      position:fixed;top:28px;right:36px;
+      font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+      color:rgba(255,255,255,.3);z-index:100;
+    }
+    .slide-num.on-light{color:rgba(0,0,0,.2);}
+
+    /* ── TYPOGRAPHY ── */
+    .eyebrow{
+      font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--green-bright);margin-bottom:20px;
+    }
+    .eyebrow.dark-text{color:var(--green);}
+    .eyebrow.white-text{color:rgba(255,255,255,.7);}
+
+    h1{font-size:clamp(38px,5vw,68px);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin-bottom:20px;}
+    h2{font-size:clamp(28px,3.5vw,48px);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:16px;}
+    h3{font-size:clamp(20px,2.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:12px;}
+
+    .sub{font-size:clamp(14px,1.6vw,20px);color:rgba(247,244,238,.6);line-height:1.6;max-width:680px;margin:0 auto;}
+    .sub.dark-text{color:var(--text-mid);}
+    .sub.white-text{color:rgba(255,255,255,.75);}
+
+    /* ── CARDS ── */
+    .cards{display:grid;gap:16px;width:100%;max-width:960px;margin:0 auto;}
+    .cards.two{grid-template-columns:1fr 1fr;}
+    .cards.three{grid-template-columns:1fr 1fr 1fr;}
+    .cards.four{grid-template-columns:1fr 1fr 1fr 1fr;}
+    @media(max-width:700px){.cards.two,.cards.three,.cards.four{grid-template-columns:1fr;}}
+
+    .card{
+      border-radius:14px;padding:24px 26px;text-align:left;
+    }
+    .card.dark-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);}
+    .card.light-card{background:#fff;border:1px solid rgba(0,0,0,.08);color:var(--text-dark);}
+    .card.green-card{background:var(--green);border:1px solid transparent;color:#fff;}
+    .card.red-card{background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);color:var(--cream);}
+    .card.highlight-card{background:var(--forest-light);border:1px solid var(--green);color:var(--cream);}
+
+    .card-label{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;opacity:.6;}
+    .card h4{font-size:17px;font-weight:800;margin-bottom:8px;line-height:1.2;}
+    .card p{font-size:13px;line-height:1.6;opacity:.8;}
+    .card .big-num{font-size:36px;font-weight:900;color:var(--green-bright);line-height:1;margin-bottom:6px;}
+    .card .big-num.red{color:#f87171;}
+    .card .big-num.white{color:#fff;}
+
+    /* list */
+    .bullet-list{list-style:none;text-align:left;max-width:700px;margin:0 auto;}
+    .bullet-list li{
+      font-size:clamp(14px,1.5vw,18px);padding:12px 0;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      display:flex;gap:14px;align-items:flex-start;color:rgba(247,244,238,.85);
+      line-height:1.5;
+    }
+    .bullet-list li:last-child{border-bottom:none;}
+    .bullet-list li .icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+    .bullet-list.dark-list li{border-bottom:1px solid rgba(0,0,0,.07);color:var(--text-mid);}
+    .bullet-list.dark-list li:last-child{border-bottom:none;}
+
+    /* divider */
+    .divider{width:48px;height:3px;background:var(--green);border-radius:2px;margin:20px auto;}
+    .divider.white{background:rgba(255,255,255,.3);}
+
+    /* tag */
+    .tag{
+      display:inline-block;padding:5px 14px;border-radius:100px;
+      font-size:12px;font-weight:700;letter-spacing:.05em;
+    }
+    .tag.green{background:rgba(58,140,87,.2);color:var(--green-bright);border:1px solid rgba(58,140,87,.3);}
+    .tag.red{background:rgba(220,38,38,.15);color:#f87171;border:1px solid rgba(220,38,38,.25);}
+    .tag.cream{background:rgba(247,244,238,.12);color:var(--cream);border:1px solid rgba(247,244,238,.2);}
+
+    /* cover logo */
+    .cover-logo{
+      font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(247,244,238,.4);margin-bottom:48px;
+    }
+    .cover-logo span{color:var(--green-bright);}
+
+    /* split layout */
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:60px;width:100%;max-width:1000px;text-align:left;align-items:center;}
+    @media(max-width:700px){.split{grid-template-columns:1fr;gap:32px;}}
+
+    /* big stat row */
+    .stat-row{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin:32px 0;}
+    .stat-item{text-align:center;}
+    .stat-item .n{font-size:clamp(32px,4vw,54px);font-weight:900;color:var(--green-bright);line-height:1;}
+    .stat-item .n.red{color:#f87171;}
+    .stat-item .l{font-size:12px;color:rgba(247,244,238,.5);margin-top:6px;font-weight:500;}
+
+    /* step */
+    .steps{display:flex;flex-direction:column;gap:12px;width:100%;max-width:700px;margin:0 auto;}
+    .step{
+      display:flex;gap:18px;align-items:flex-start;text-align:left;
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);
+      border-radius:12px;padding:18px 22px;
+    }
+    .step-num{
+      width:32px;height:32px;border-radius:50%;background:var(--green);
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:800;color:#fff;flex-shrink:0;
+    }
+    .step-body h5{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--cream);}
+    .step-body p{font-size:13px;color:rgba(247,244,238,.6);line-height:1.5;}
+
+    /* rev share highlight */
+    .rev-box{
+      background:var(--forest-light);border:2px solid var(--green);
+      border-radius:16px;padding:36px 44px;max-width:560px;margin:0 auto;
+    }
+    .rev-box .pct{font-size:72px;font-weight:900;color:var(--green-bright);line-height:1;letter-spacing:-.03em;}
+    .rev-box .pct-label{font-size:16px;font-weight:600;color:rgba(247,244,238,.7);margin-bottom:24px;}
+    .rev-box ul{list-style:none;text-align:left;}
+    .rev-box ul li{font-size:14px;color:rgba(247,244,238,.8);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:10px;}
+    .rev-box ul li:last-child{border-bottom:none;}
+    .rev-box ul li::before{content:"✓";color:var(--green-bright);flex-shrink:0;}
+  </style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ══ SLIDE 1 — COVER ══ -->
+  <div class="slide dark active" id="s1">
+    <div class="cover-logo">Ivy Brothers <span>×</span> Marco Garcia</div>
+    <div class="eyebrow">Growth Partnership</div>
+    <h1>You're leaving<br>$500K on the table.</h1>
+    <div class="divider"></div>
+    <p class="sub">Not because leads aren't coming in.<br>Because the system to catch them doesn't exist yet.</p>
+  </div>
+
+  <!-- ══ SLIDE 2 — OPPORTUNITY COST ══ -->
+  <div class="slide mid" id="s2">
+    <div class="eyebrow">The Gap</div>
+    <h2>What's not working right now</h2>
+    <div class="divider"></div>
+    <ul class="bullet-list" style="margin-top:12px;">
+      <li><span class="icon">🔴</span><span><strong>No CRM.</strong> Leads submit a form and go into a void. There is no record of what happened next.</span></li>
+      <li><span class="icon">🔴</span><span><strong>Handpicked outreach.</strong> The center decides who to call. Most leads are never touched.</span></li>
+      <li><span class="icon">🔴</span><span><strong>No tracking.</strong> You can't see who booked a call, who showed, who closed. You can't improve what you can't measure.</span></li>
+      <li><span class="icon">🔴</span><span><strong>No mid-funnel.</strong> Families who are interested but not ready bounce and never come back.</span></li>
+      <li><span class="icon">🔴</span><span><strong>Duplicate tools.</strong> Paying for Zapier and Instantly separately — both replaced by one tool at lower cost.</span></li>
+    </ul>
+  </div>
+
+  <!-- ══ SLIDE 3 — COST OF INACTION ══ -->
+  <div class="slide red-bg" id="s3">
+    <div class="eyebrow white-text">Opportunity Cost</div>
+    <h2>What it's costing you to wait</h2>
+    <div class="divider white"></div>
+    <div class="cards three" style="margin-top:32px;max-width:900px;">
+      <div class="card dark-card" style="background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.2);">
+        <div class="big-num red">~30</div>
+        <div class="card-label">Leads/mo going untouched</div>
+        <p>If 50 leads come in and only 20 get called, the other 30 are gone. At $20K avg deal size that's $600K in pipeline that evaporates every month.</p>
+      </div>
+      <div class="card dark-card" style="background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.2);">
+        <div class="big-num red">0%</div>
+        <div class="card-label">Mid-funnel conversion</div>
+        <p>"Interested but not ready" families have nowhere to go. No webinar, no nurture, no briefing. 100% of warm leads bounce and never come back.</p>
+      </div>
+      <div class="card dark-card" style="background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.2);">
+        <div class="big-num red">$0</div>
+        <div class="card-label">Revenue attributed to source</div>
+        <p>No CRM means no attribution. You can't tell which channel drives revenue, which setter closes more, or where to invest next.</p>
+      </div>
+    </div>
+    <p class="sub white-text" style="margin-top:28px;font-size:15px;">Every week without a system is a week of compounding loss.</p>
+  </div>
+
+  <!-- ══ SLIDE 4 — THE SOLUTION ══ -->
+  <div class="slide dark" id="s4">
+    <div class="eyebrow">The Fix</div>
+    <h2>Three systems. 90 days.</h2>
+    <div class="divider"></div>
+    <div class="cards three" style="margin-top:28px;max-width:960px;">
+      <div class="card highlight-card">
+        <div class="card-label">System 1</div>
+        <h4>CRM + Setter Workflow</h4>
+        <p>Every lead captured, tagged, assigned. Setter reaches out to everyone — no handpicking. Every touchpoint logged. Speed to lead under 5 minutes.</p>
+      </div>
+      <div class="card highlight-card">
+        <div class="card-label">System 2</div>
+        <h4>Application-Gated Private Briefing</h4>
+        <p>Replace the open webinar with a 20-seat invite-only session. Families apply to attend. AO only paid after seat 20 is confirmed. $120–200K per run.</p>
+      </div>
+      <div class="card highlight-card">
+        <div class="card-label">System 3</div>
+        <h4>Stack Consolidation</h4>
+        <p>GoHighLevel replaces Zapier, Instantly, and Calendly. One tool. One login. Lower monthly cost. All automation, sequences, and tracking native.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 5 — SERVICES ══ -->
+  <div class="slide mid" id="s5">
+    <div class="eyebrow">What Marco Does</div>
+    <h2>Ops for your entire sales process</h2>
+    <div class="divider"></div>
+    <div class="cards two" style="margin-top:28px;max-width:880px;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h5>CRM Setup & Management</h5>
+            <p>GoHighLevel configured — pipeline, automations, setter task queue, reporting dashboard. Replaces Zapier + Instantly from day 1.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h5>Setter Workflow + Training</h5>
+            <p>Build the full outreach system. Setter contacts every lead. Objection scripts for every scenario. Daily KPI tracking.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h5>Application Funnel Build</h5>
+            <p>Build apply.html on the existing site. Application form → CRM pipeline → setter assigned within 24hrs. Runs automatically.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h5>Email Sequences</h5>
+            <p>Pre-call sequence (3 emails). Post-briefing sequence segmented by country + grad year. Lower-ticket nurture path.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h5>Private Briefing Production</h5>
+            <p>Build and run the 20-seat invite-only event. Jake briefed and rehearsed. AO coordinated. Full run-of-show managed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h5>Weekly Review + Optimization</h5>
+            <p>30-minute Friday review. Dashboard pulls automatically. Identify what's working, kill what isn't, scale what converts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 6 — THE BRIEFING ══ -->
+  <div class="slide dark" id="s6">
+    <div class="eyebrow">The Flagship Asset</div>
+    <h2>The Private Briefing</h2>
+    <div class="divider"></div>
+    <div class="split" style="margin-top:24px;">
+      <div>
+        <p style="font-size:15px;color:rgba(247,244,238,.65);line-height:1.7;margin-bottom:24px;">Not a webinar. An application-gated, invite-only session with a former Stanford Admissions Officer. 20 families. Every seat confirmed before the AO is paid.</p>
+        <ul class="bullet-list" style="max-width:100%;">
+          <li><span class="icon">✦</span><span>Families apply at theivybrothers.com/apply</span></li>
+          <li><span class="icon">✦</span><span>IB reviews + invites within 24hrs</span></li>
+          <li><span class="icon">✦</span><span>Setter contacts every applicant</span></li>
+          <li><span class="icon">✦</span><span>AO contracted after seat 20 confirms</span></li>
+          <li><span class="icon">✦</span><span>Close offer: Roundtable Preview Call</span></li>
+        </ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="card green-card">
+          <div class="card-label" style="color:rgba(255,255,255,.6);">At 30% close rate</div>
+          <div class="big-num white">$120K</div>
+          <p>per session minimum</p>
+        </div>
+        <div class="card green-card">
+          <div class="card-label" style="color:rgba(255,255,255,.6);">At 50% close rate</div>
+          <div class="big-num white">$200K</div>
+          <p>per session</p>
+        </div>
+        <div class="card dark-card">
+          <div class="card-label">AO cost recovered</div>
+          <div class="big-num">Close #1</div>
+          <p style="font-size:12px;">Fee is $2–5K. First close pays it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 7 — REVENUE MODEL ══ -->
+  <div class="slide mid" id="s7">
+    <div class="eyebrow">90-Day Model</div>
+    <h2>Conservative revenue projection</h2>
+    <div class="divider"></div>
+    <div class="cards two" style="margin-top:28px;max-width:860px;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card dark-card">
+          <div class="card-label">CRM + Setter System</div>
+          <h4>Speed-to-lead uplift on existing leads</h4>
+          <p>+20% close rate on current volume. Baseline TBD — but every untouched lead today is upside.</p>
+        </div>
+        <div class="card dark-card">
+          <div class="card-label">Setter (15–20 calls/week)</div>
+          <h4>$50–80K/mo</h4>
+          <p>15–20 new qualified calls/week at $15K avg deal size.</p>
+        </div>
+        <div class="card dark-card">
+          <div class="card-label">Hook Program (lower ticket)</div>
+          <h4>$24–40K/mo</h4>
+          <p>30–50 units/month at $797 avg. Downsell path + standalone offer.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card highlight-card">
+          <div class="card-label">Private Briefing (2 sessions)</div>
+          <h4>$240–400K</h4>
+          <p>2 sessions over 90 days. 20 families each. 30–50% close at $20K avg.</p>
+        </div>
+        <div class="card dark-card">
+          <div class="card-label">Referral Program</div>
+          <h4>$75–150K</h4>
+          <p>5–10 referrals over 90 days at $15K avg. Existing client base untapped.</p>
+        </div>
+        <div class="card green-card" style="margin-top:4px;">
+          <div class="card-label" style="color:rgba(255,255,255,.6);">Total 90-Day Target</div>
+          <div class="big-num white" style="font-size:44px;">$300–500K</div>
+          <p>Net new attributed revenue</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 8 — COMPENSATION ══ -->
+  <div class="slide dark" id="s8">
+    <div class="eyebrow">The Deal</div>
+    <h2>Simple. Performance-based.</h2>
+    <div class="divider"></div>
+    <div class="rev-box" style="margin-top:28px;">
+      <div class="pct">10–15%</div>
+      <div class="pct-label">of directly attributable revenue</div>
+      <ul>
+        <li>Any lead that enters through systems Marco builds</li>
+        <li>Tracked in GHL — source-tagged from day 1</li>
+        <li>Defined upfront, no ambiguity</li>
+        <li>Paid monthly on closed revenue, not pipeline</li>
+        <li>No revenue generated = no payment owed</li>
+      </ul>
+    </div>
+    <p class="sub" style="margin-top:24px;font-size:13px;">"Directly attributable" = any lead captured via the CRM, application funnel, briefing, or email sequences Marco builds and manages.</p>
+  </div>
+
+  <!-- ══ SLIDE 9 — NEXT STEPS ══ -->
+  <div class="slide mid" id="s9">
+    <div class="eyebrow">What Happens Next</div>
+    <h2>Four things to unblock</h2>
+    <div class="divider"></div>
+    <div class="steps" style="margin-top:24px;">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h5>Confirm the Stanford AO</h5>
+          <p>Name + credential needed before apply.html goes live. This is the single biggest driver of application conversion rate.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h5>Provision GoHighLevel</h5>
+          <p>One account, one setup. Replaces Zapier + Instantly from day 1. CRM is the foundation — nothing else runs without it.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h5>Build apply.html on the existing site</h5>
+          <p>Goes live at theivybrothers.com/apply. Application form → CRM → setter assigned. Site repo is already on GitHub.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h5>Lock the first briefing date</h5>
+          <p>Target: August–September for back-to-school traffic. Once the date is set, applications can open and the room can start filling.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 10 — CLOSE ══ -->
+  <div class="slide green-bg" id="s10">
+    <div class="eyebrow white-text">Let's Build</div>
+    <h1 style="font-size:clamp(36px,5vw,64px);color:#fff;">The system is ready.<br>The leads are waiting.</h1>
+    <div class="divider white"></div>
+    <p class="sub white-text" style="margin-bottom:36px;">Every week without a CRM is a week of compounding loss.<br>The briefing alone covers the engagement cost in session one.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+      <span class="tag cream">10–15% rev share</span>
+      <span class="tag cream">Performance-based</span>
+      <span class="tag cream">90-day sprint</span>
+      <span class="tag cream">$300–500K target</span>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- SLIDE NUM -->
+<div class="slide-num" id="slideNum">1 / 10</div>
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button id="prevBtn" onclick="changeSlide(-1)">← Prev</button>
+  <div class="progress" id="dots"></div>
+  <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+
+  const lightSlides = new Set([/* none currently light */]);
+  const slideNum = document.getElementById('slideNum');
+  const nav = document.getElementById('nav');
+  const dotsEl = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  // build dots
+  for(let i=0;i<total;i++){
+    const d=document.createElement('div');
+    d.className='dot';
+    d.onclick=()=>goTo(i);
+    dotsEl.appendChild(d);
+  }
+
+  function isLightSlide(idx){
+    return slides[idx].classList.contains('light')||slides[idx].classList.contains('white');
+  }
+
+  function goTo(idx){
+    slides[cur].classList.remove('active');
+    cur=Math.max(0,Math.min(total-1,idx));
+    slides[cur].classList.add('active');
+    updateUI();
+  }
+
+  function changeSlide(dir){ goTo(cur+dir); }
+
+  function updateUI(){
+    const light=isLightSlide(cur);
+    slideNum.textContent=(cur+1)+' / '+total;
+    slideNum.className='slide-num'+(light?' on-light':'');
+    prevBtn.className=light?'on-light':'';
+    nextBtn.className=light?'on-light':'';
+    const dots=dotsEl.querySelectorAll('.dot');
+    dots.forEach((d,i)=>{
+      d.className='dot'+(light?' on-light':'')+(i===cur?' active':'');
+    });
+    prevBtn.style.opacity=cur===0?'0.3':'1';
+    nextBtn.style.opacity=cur===total-1?'0.3':'1';
+  }
+
+  // keyboard
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') changeSlide(1);
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp') changeSlide(-1);
+  });
+
+  // touch swipe
+  let tx=0;
+  document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+  document.addEventListener('touchend',e=>{
+    const dx=tx-e.changedTouches[0].clientX;
+    if(Math.abs(dx)>40) changeSlide(dx>0?1:-1);
+  });
+
+  updateUI();
+</script>
+</body>
+</html>
