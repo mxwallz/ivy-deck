@@ -180,6 +180,34 @@
     .rev-box ul li{font-size:14px;color:rgba(247,244,238,.8);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:10px;}
     .rev-box ul li:last-child{border-bottom:none;}
     .rev-box ul li::before{content:"✓";color:var(--green-bright);flex-shrink:0;}
+
+    /* ── BROWSER MOCKS ── */
+    .browser-mock{background:#0a0f0c;border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;}
+    .browser-bar-mock{background:#111a14;border-bottom:1px solid rgba(255,255,255,.08);padding:8px 12px;display:flex;align-items:center;gap:10px;}
+    .bm-dots{display:flex;gap:5px;}
+    .bm-dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.15);display:block;}
+    .bm-url{flex:1;background:rgba(255,255,255,.07);border-radius:4px;padding:4px 10px;font-size:10px;color:rgba(255,255,255,.35);font-family:'Inter',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    /* scaled iframe — comparison slide */
+    .preview-wrap{width:100%;height:200px;overflow:hidden;position:relative;background:#0b1a10;}
+    .preview-wrap iframe{width:1200px;height:800px;transform:scale(0.33);transform-origin:top left;border:none;pointer-events:none;}
+    /* intern wireframe mock */
+    .mock-body{padding:12px;}
+    .intern-mock{background:#fff;height:200px;}
+    .mock-nav-strip{height:24px;background:#1a1a2e;border-radius:2px;margin-bottom:8px;}
+    .mock-hero-plain{background:#e8e8f0;border-radius:3px;padding:14px;margin-bottom:8px;text-align:center;}
+    .mock-h1-plain{height:10px;background:#b0b0c0;border-radius:2px;width:65%;margin:0 auto 7px;}
+    .mock-h2-plain{height:7px;background:#c8c8d8;border-radius:2px;width:45%;margin:0 auto 10px;}
+    .mock-btn-plain{height:18px;background:#9ca3af;border-radius:3px;width:28%;margin:0 auto;}
+    .mock-section-plain{padding:8px;}
+    .mock-text-block{height:6px;background:#e0e0e8;border-radius:2px;margin-bottom:5px;}
+    .mock-text-block.short{width:55%;}
+    .mock-grid-plain{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;padding:4px;}
+    .mock-card-plain{height:40px;background:#eeeef4;border-radius:3px;border:1px solid #d4d4dc;}
+    /* full page preview — dedicated slides */
+    .full-preview-wrap{width:100%;max-width:1000px;}
+    .full-browser{display:flex;flex-direction:column;}
+    .full-preview-inner{overflow:hidden;position:relative;height:420px;background:#0b1a10;}
+    .full-preview-inner iframe{width:1440px;height:1100px;transform:scale(0.65);transform-origin:top left;border:none;pointer-events:none;}
   </style>
 </head>
 <body>
@@ -411,8 +439,114 @@
     <p class="sub" style="margin-top:24px;font-size:13px;">"Directly attributable" = any lead captured via the CRM, application funnel, briefing, or email sequences Marco builds and manages.</p>
   </div>
 
-  <!-- ══ SLIDE 9 — NEXT STEPS ══ -->
-  <div class="slide mid" id="s9">
+  <!-- ══ SLIDE 9 — WORK COMPARISON ══ -->
+  <div class="slide dark" id="s9">
+    <div class="eyebrow">Work Quality</div>
+    <h2 style="margin-bottom:8px;">Intern build vs. what I build</h2>
+    <p class="sub" style="margin-bottom:24px;font-size:13px;">Same brief. Different output. The difference shows in conversion.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:1020px;">
+
+      <!-- INTERN SIDE -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span class="tag red" style="font-size:11px;">Intern Build</span>
+        </div>
+        <div class="browser-mock">
+          <div class="browser-bar-mock">
+            <div class="bm-dots"><span></span><span></span><span></span></div>
+            <div class="bm-url">theivybrothers.com</div>
+          </div>
+          <div class="mock-body intern-mock">
+            <div class="mock-nav-strip"></div>
+            <div class="mock-hero-plain">
+              <div class="mock-h1-plain"></div>
+              <div class="mock-h2-plain"></div>
+              <div class="mock-btn-plain"></div>
+            </div>
+            <div class="mock-section-plain">
+              <div class="mock-text-block"></div>
+              <div class="mock-text-block short"></div>
+              <div class="mock-text-block"></div>
+            </div>
+            <div class="mock-grid-plain">
+              <div class="mock-card-plain"></div>
+              <div class="mock-card-plain"></div>
+              <div class="mock-card-plain"></div>
+            </div>
+          </div>
+        </div>
+        <ul style="list-style:none;margin-top:12px;">
+          <li style="font-size:12px;color:rgba(247,244,238,.45);padding:4px 0;display:flex;gap:8px;"><span style="color:#f87171;">✕</span> No conversion hierarchy</li>
+          <li style="font-size:12px;color:rgba(247,244,238,.45);padding:4px 0;display:flex;gap:8px;"><span style="color:#f87171;">✕</span> No social proof placement</li>
+          <li style="font-size:12px;color:rgba(247,244,238,.45);padding:4px 0;display:flex;gap:8px;"><span style="color:#f87171;">✕</span> Generic copy, no ICP language</li>
+          <li style="font-size:12px;color:rgba(247,244,238,.45);padding:4px 0;display:flex;gap:8px;"><span style="color:#f87171;">✕</span> No CTA optimization</li>
+        </ul>
+      </div>
+
+      <!-- MARCO SIDE -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span class="tag green" style="font-size:11px;">Marco Build</span>
+        </div>
+        <div class="browser-mock" style="border-color:var(--green);">
+          <div class="browser-bar-mock" style="background:#0d2318;border-bottom-color:#1e3d28;">
+            <div class="bm-dots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div>
+            <div class="bm-url" style="background:#0b1a10;color:#4db36e;">mxwallz.github.io/ivy-brothers-site/webinar.html</div>
+          </div>
+          <div class="preview-wrap">
+            <iframe src="https://mxwallz.github.io/ivy-brothers-site/webinar.html" scrolling="no" loading="lazy" title="Marco's webinar page"></iframe>
+          </div>
+        </div>
+        <ul style="list-style:none;margin-top:12px;">
+          <li style="font-size:12px;color:rgba(247,244,238,.75);padding:4px 0;display:flex;gap:8px;"><span style="color:var(--green-bright);">✓</span> Brand-matched design (forest / green)</li>
+          <li style="font-size:12px;color:rgba(247,244,238,.75);padding:4px 0;display:flex;gap:8px;"><span style="color:var(--green-bright);">✓</span> ICP-specific copy + social proof</li>
+          <li style="font-size:12px;color:rgba(247,244,238,.75);padding:4px 0;display:flex;gap:8px;"><span style="color:var(--green-bright);">✓</span> Conversion hierarchy — above fold CTA</li>
+          <li style="font-size:12px;color:rgba(247,244,238,.75);padding:4px 0;display:flex;gap:8px;"><span style="color:var(--green-bright);">✓</span> Live on GitHub Pages, mobile responsive</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 10 — LANDING PAGE PREVIEW ══ -->
+  <div class="slide dark" id="s10">
+    <div class="eyebrow">Live Example — Landing Page</div>
+    <h2 style="margin-bottom:6px;">Webinar Registration Page</h2>
+    <p class="sub" style="margin-bottom:20px;font-size:13px;">Built on ivy-brothers-site. Live now at the URL below.</p>
+    <div class="full-preview-wrap">
+      <div class="browser-mock full-browser">
+        <div class="browser-bar-mock" style="background:#0d2318;border-bottom-color:#1e3d28;">
+          <div class="bm-dots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div>
+          <div class="bm-url" style="background:#0b1a10;color:#4db36e;flex:1;">mxwallz.github.io/ivy-brothers-site/webinar.html</div>
+          <a href="https://mxwallz.github.io/ivy-brothers-site/webinar.html" target="_blank" style="font-size:11px;color:#4db36e;text-decoration:none;font-weight:600;white-space:nowrap;padding-left:12px;">Open ↗</a>
+        </div>
+        <div class="full-preview-inner">
+          <iframe src="https://mxwallz.github.io/ivy-brothers-site/webinar.html" scrolling="no" loading="lazy" title="Webinar landing page"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 11 — COURSE PAGE PREVIEW ══ -->
+  <div class="slide dark" id="s11">
+    <div class="eyebrow">Live Example — Course Page</div>
+    <h2 style="margin-bottom:6px;">Hook Program — Lower Ticket Entry</h2>
+    <p class="sub" style="margin-bottom:20px;font-size:13px;">Downsell path. Captures families who aren't ready for the full program.</p>
+    <div class="full-preview-wrap">
+      <div class="browser-mock full-browser">
+        <div class="browser-bar-mock" style="background:#0d2318;border-bottom-color:#1e3d28;">
+          <div class="bm-dots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div>
+          <div class="bm-url" style="background:#0b1a10;color:#4db36e;flex:1;">mxwallz.github.io/ivy-brothers-site/course.html</div>
+          <a href="https://mxwallz.github.io/ivy-brothers-site/course.html" target="_blank" style="font-size:11px;color:#4db36e;text-decoration:none;font-weight:600;white-space:nowrap;padding-left:12px;">Open ↗</a>
+        </div>
+        <div class="full-preview-inner">
+          <iframe src="https://mxwallz.github.io/ivy-brothers-site/course.html" scrolling="no" loading="lazy" title="Course page"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 12 — NEXT STEPS ══ -->
+  <div class="slide mid" id="s12">
     <div class="eyebrow">What Happens Next</div>
     <h2>Four things to unblock</h2>
     <div class="divider"></div>
@@ -448,8 +582,8 @@
     </div>
   </div>
 
-  <!-- ══ SLIDE 10 — CLOSE ══ -->
-  <div class="slide green-bg" id="s10">
+  <!-- ══ SLIDE 13 — CLOSE ══ -->
+  <div class="slide green-bg" id="s13">
     <div class="eyebrow white-text">Let's Build</div>
     <h1 style="font-size:clamp(36px,5vw,64px);color:#fff;">The system is ready.<br>The leads are waiting.</h1>
     <div class="divider white"></div>
@@ -509,7 +643,7 @@
 
   function updateUI(){
     const light=isLightSlide(cur);
-    slideNum.textContent=(cur+1)+' / '+total;
+    slideNum.textContent=(cur+1)+' / '+slides.length;
     slideNum.className='slide-num'+(light?' on-light':'');
     prevBtn.className=light?'on-light':'';
     nextBtn.className=light?'on-light':'';
