@@ -156,6 +156,20 @@
     .si .n{font-size:clamp(30px,3.5vw,50px);font-weight:900;color:var(--green-bright);line-height:1;}
     .si .n.red{color:#f87171;}
     .si .l{font-size:12px;color:rgba(247,244,238,.45);margin-top:5px;font-weight:500;}
+
+    /* ── DELIVERABLE LINKS ── */
+    .deliverable-link{
+      display:block;text-decoration:none;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;padding:20px 22px;
+      transition:all .2s;cursor:pointer;
+    }
+    .deliverable-link:hover{background:var(--forest-light);border-color:var(--green);}
+    .dlbl-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .dext{font-size:12px;font-weight:700;color:var(--green-bright);}
+    .dtitle{font-size:16px;font-weight:800;color:var(--cream);margin-bottom:6px;line-height:1.25;}
+    .dsub{font-size:12px;color:rgba(247,244,238,.55);line-height:1.5;margin-bottom:10px;}
+    .durl{font-size:11px;color:rgba(247,244,238,.3);font-family:'Inter',monospace;}
   </style>
 </head>
 <body>
@@ -173,9 +187,10 @@
 <!-- ══ 2 — PROBLEMS RIGHT NOW ══ -->
 <div class="slide mid">
   <div class="eye red">No Standardized Process</div>
-  <h2>What's broken right now</h2>
+  <h2>$50–200K/mo. No system.</h2>
   <div class="divider"></div>
-  <div class="grid g2" style="margin-top:20px;max-width:900px;">
+  <p class="sub" style="margin-bottom:22px;">You're already doing this with zero infrastructure. That's the point — imagine what happens when you add one.</p>
+  <div class="grid g2" style="max-width:900px;">
     <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="card cr">
         <div class="clbl">Lead Handling</div>
@@ -185,7 +200,7 @@
       <div class="card cr">
         <div class="clbl">Outreach</div>
         <h4>Handpicked. Manual. Inconsistent.</h4>
-        <p>The center decides who to call. Most leads are never touched. There is no setter workflow — just judgment calls.</p>
+        <p>The center decides who to call. Most leads are never touched. No setter workflow — just judgment calls.</p>
       </div>
       <div class="card cr">
         <div class="clbl">Mid-Funnel</div>
@@ -197,17 +212,17 @@
       <div class="card cr">
         <div class="clbl">Attribution</div>
         <h4>Revenue is invisible.</h4>
-        <p>No source tagging, no pipeline stages, no close rate data. Can't tell which channel drives revenue or what to invest in next.</p>
+        <p>No source tagging, no pipeline stages, no close rate data. Can't tell which channel works or what to double down on.</p>
       </div>
       <div class="card cr">
-        <div class="clbl">Tool Cost</div>
-        <h4>Paying $50–200/mo for tools that don't connect.</h4>
-        <p>Zapier + Instantly billed separately. No integration between them. Both replaced by GoHighLevel at $97/mo flat.</p>
+        <div class="clbl">Tools</div>
+        <h4>Zapier + Instantly — billed separately, don't connect.</h4>
+        <p>Both replaced by GoHighLevel at $97/mo flat. One login. One system.</p>
       </div>
-      <div class="card cd" style="background:rgba(255,255,255,.03);">
-        <div class="clbl">The Result</div>
-        <div class="big-n red" style="font-size:28px;">Every week without a system</div>
-        <p style="margin-top:4px;">is a week of compounding lead loss — with no data to show how much is being left behind.</p>
+      <div class="card ch">
+        <div class="clbl">The Opportunity</div>
+        <div class="big-n" style="font-size:26px;color:var(--green-bright);">3–5x current revenue</div>
+        <p style="margin-top:4px;">is what standardized ops, a setter system, and a mid-funnel asset typically add — on an existing base that's already converting.</p>
       </div>
     </div>
   </div>
@@ -276,7 +291,51 @@
   </div>
 </div>
 
-<!-- ══ 5 — THE SYSTEM FLOWCHART ══ -->
+<!-- ══ 5 — DELIVERABLES ══ -->
+<div class="slide dark">
+  <div class="eye">Live Deliverables</div>
+  <h2>Everything built. All live.</h2>
+  <div class="divider"></div>
+  <div class="grid g2" style="margin-top:20px;max-width:900px;">
+    <a href="https://mxwallz.github.io/ivy-brothers-site/webinar.html" target="_blank" class="deliverable-link">
+      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
+      <div class="dtitle">Webinar Registration Page</div>
+      <div class="dsub">Brand-matched, conversion-optimized. Sticky topbar, social proof, above-fold CTA.</div>
+      <div class="durl">ivy-brothers-site/webinar.html</div>
+    </a>
+    <a href="https://mxwallz.github.io/ivy-brothers-site/course.html" target="_blank" class="deliverable-link">
+      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
+      <div class="dtitle">Hook Program — Course Page</div>
+      <div class="dsub">Lower-ticket entry point ($497–997). Downsell path. Post-purchase upsell to full program.</div>
+      <div class="durl">ivy-brothers-site/course.html</div>
+    </a>
+    <a href="https://mxwallz.github.io/ivy-pitch/" target="_blank" class="deliverable-link">
+      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
+      <div class="dtitle">Sales Ops Flowchart</div>
+      <div class="dsub">Full CRM + setter workflow, application gate flow, webinar funnel, CRM comparison, KPIs.</div>
+      <div class="durl">mxwallz.github.io/ivy-pitch/</div>
+    </a>
+    <a href="https://mxwallz.github.io/ivy-deck/" target="_blank" class="deliverable-link">
+      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
+      <div class="dtitle">This Pitch Deck</div>
+      <div class="dsub">13-slide partnership deck. Shareable link. Arrow-key navigation. Mobile responsive.</div>
+      <div class="durl">mxwallz.github.io/ivy-deck/</div>
+    </a>
+  </div>
+  <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <div class="card cd" style="padding:14px 20px;text-align:left;max-width:900px;width:100%;display:flex;gap:24px;flex-wrap:wrap;">
+      <div style="font-size:11px;color:rgba(247,244,238,.4);text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:6px;width:100%;">Strategy Docs (in vault)</div>
+      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Research foundation (18 fields)</div>
+      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Unique mechanism doc</div>
+      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Webinar strategy v1 + v2</div>
+      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Brand voice (71/100)</div>
+      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ 90-day growth plan</div>
+      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Setter job posting</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 6 — THE SYSTEM FLOWCHART ══ -->
 <div class="slide flush">
   <div style="position:absolute;top:0;left:0;right:0;height:52px;background:var(--forest);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:10;border-bottom:1px solid rgba(255,255,255,.07);">
     <div class="eye" style="margin:0;font-size:10px;">The Proposed System</div>
