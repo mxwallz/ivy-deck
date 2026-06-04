@@ -1,396 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ivy Brothers — Growth Partnership</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    :root{
-      --forest:#0b1a10;--forest-mid:#152b1c;--forest-light:#1e3d28;
-      --green:#3a8c57;--green-bright:#4db36e;
-      --cream:#f7f4ee;--white:#fff;
-      --text-dark:#141c26;--text-mid:#3d4a55;
-      --red:#dc2626;--red-bg:#1a0505;
-    }
-    html,body{height:100%;overflow:hidden;font-family:'Inter',-apple-system,sans-serif;background:var(--forest);color:var(--cream);}
-
-    /* ── DECK ── */
-    .deck{width:100%;height:100vh;position:relative;}
-    .slide{
-      position:absolute;inset:0;display:flex;flex-direction:column;
-      justify-content:center;align-items:center;
-      padding:52px 72px;
-      opacity:0;pointer-events:none;transition:opacity .3s ease;text-align:center;
-    }
-    .slide.active{opacity:1;pointer-events:all;}
-    .slide.dark{background:var(--forest);}
-    .slide.mid{background:var(--forest-mid);}
-    .slide.red-bg{background:#110303;}
-    .slide.green-bg{background:var(--green);}
-    .slide.flush{padding:0;}
-
-    /* ── NAV ── */
-    .nav-bar{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:200;}
-    .nav-bar button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:9px 20px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;}
-    .nav-bar button:hover{background:rgba(255,255,255,.2);}
-    .dots{display:flex;gap:5px;}
-    .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:background .18s;}
-    .dot.active{background:var(--green-bright);}
-    .slide-num{position:fixed;top:24px;right:30px;font-size:11px;font-weight:600;letter-spacing:.15em;color:rgba(255,255,255,.25);z-index:200;}
-
-    /* ── TYPE ── */
-    .eye{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--green-bright);margin-bottom:18px;}
-    .eye.dim{color:rgba(255,255,255,.4);}
-    .eye.red{color:#f87171;}
-    h1{font-size:clamp(36px,4.8vw,66px);font-weight:900;line-height:1.04;letter-spacing:-.025em;margin-bottom:18px;}
-    h2{font-size:clamp(26px,3.2vw,46px);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px;}
-    .sub{font-size:clamp(13px,1.5vw,18px);color:rgba(247,244,238,.55);line-height:1.65;max-width:660px;margin:0 auto;}
-    .sub.wt{color:rgba(255,255,255,.7);}
-    .divider{width:44px;height:3px;background:var(--green);border-radius:2px;margin:18px auto;}
-    .divider.w{background:rgba(255,255,255,.3);}
-
-    /* ── CARDS ── */
-    .grid{display:grid;gap:14px;width:100%;max-width:980px;margin:0 auto;}
-    .g2{grid-template-columns:1fr 1fr;}
-    .g3{grid-template-columns:1fr 1fr 1fr;}
-    .g4{grid-template-columns:1fr 1fr 1fr 1fr;}
-    @media(max-width:720px){.g2,.g3,.g4{grid-template-columns:1fr;}}
-    .card{border-radius:12px;padding:22px 24px;text-align:left;}
-    .cd{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);}
-    .ch{background:var(--forest-light);border:1px solid var(--green);}
-    .cg{background:var(--green);border:1px solid transparent;color:#fff;}
-    .cr{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.18);}
-    .card .clbl{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.55;margin-bottom:8px;}
-    .card h4{font-size:16px;font-weight:800;margin-bottom:7px;line-height:1.25;}
-    .card p{font-size:13px;line-height:1.6;opacity:.75;}
-    .big-n{font-size:36px;font-weight:900;color:var(--green-bright);line-height:1;margin-bottom:5px;}
-    .big-n.red{color:#f87171;}
-    .big-n.w{color:#fff;}
-
-    /* ── LISTS ── */
-    .blist{list-style:none;text-align:left;width:100%;max-width:760px;margin:0 auto;}
-    .blist li{font-size:clamp(13px,1.4vw,17px);padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:13px;align-items:flex-start;color:rgba(247,244,238,.82);line-height:1.5;}
-    .blist li:last-child{border-bottom:none;}
-    .blist li .ic{flex-shrink:0;margin-top:1px;}
-
-    /* ── SPLIT ── */
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%;max-width:1000px;text-align:left;align-items:start;}
-    @media(max-width:720px){.split{grid-template-columns:1fr;}}
-    .split-head{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.08);}
-    .split-head.green{color:var(--green-bright);}
-    .split-head.red{color:#f87171;}
-    .row-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;line-height:1.5;}
-    .row-item:last-child{border-bottom:none;}
-    .row-item .ic{flex-shrink:0;margin-top:1px;font-size:13px;}
-    .row-item .txt{color:rgba(247,244,238,.75);}
-    .row-item .txt strong{color:var(--cream);font-weight:600;}
-
-    /* ── STEPS ── */
-    .steps{display:flex;flex-direction:column;gap:10px;width:100%;max-width:700px;margin:0 auto;}
-    .step{display:flex;gap:16px;align-items:flex-start;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px 20px;}
-    .step-n{width:30px;height:30px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;}
-    .step h5{font-size:14px;font-weight:700;margin-bottom:3px;color:var(--cream);}
-    .step p{font-size:12px;color:rgba(247,244,238,.55);line-height:1.5;}
-
-    /* ── REV BOX ── */
-    .rev-box{background:var(--forest-light);border:2px solid var(--green);border-radius:16px;padding:34px 44px;max-width:520px;margin:0 auto;}
-    .rev-box .pct{font-size:70px;font-weight:900;color:var(--green-bright);line-height:1;letter-spacing:-.03em;}
-    .rev-box .pct-lbl{font-size:15px;font-weight:600;color:rgba(247,244,238,.6);margin-bottom:22px;}
-    .rev-box ul{list-style:none;text-align:left;}
-    .rev-box ul li{font-size:13px;color:rgba(247,244,238,.8);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.07);display:flex;gap:9px;}
-    .rev-box ul li:last-child{border-bottom:none;}
-    .rev-box ul li::before{content:"✓";color:var(--green-bright);flex-shrink:0;}
-
-    /* ── TAGS ── */
-    .tag{display:inline-block;padding:4px 13px;border-radius:100px;font-size:11px;font-weight:700;}
-    .tg{background:rgba(58,140,87,.18);color:var(--green-bright);border:1px solid rgba(58,140,87,.28);}
-    .tr{background:rgba(220,38,38,.13);color:#f87171;border:1px solid rgba(220,38,38,.22);}
-    .tc{background:rgba(247,244,238,.1);color:var(--cream);border:1px solid rgba(247,244,238,.18);}
-    .ty{background:rgba(234,179,8,.12);color:#fbbf24;border:1px solid rgba(234,179,8,.2);}
-
-    /* ── ROADMAP TABLE ── */
-    .roadmap{width:100%;max-width:900px;border-collapse:collapse;font-size:13px;}
-    .roadmap th{text-align:left;padding:9px 14px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,244,238,.4);border-bottom:1px solid rgba(255,255,255,.08);}
-    .roadmap td{padding:10px 14px;color:rgba(247,244,238,.75);border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;line-height:1.45;}
-    .roadmap tr:last-child td{border-bottom:none;}
-    .roadmap td:first-child{color:var(--cream);font-weight:600;white-space:nowrap;}
-
-    /* ── BROWSER FRAMES ── */
-    .browser{background:#0a0f0c;border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;}
-    .browser.gb{border-color:var(--green);}
-    .bbar{background:#111a14;border-bottom:1px solid rgba(255,255,255,.07);padding:8px 12px;display:flex;align-items:center;gap:10px;}
-    .bdots{display:flex;gap:5px;}
-    .bdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.13);display:block;}
-    .burl{flex:1;background:rgba(255,255,255,.06);border-radius:4px;padding:4px 9px;font-size:10px;color:rgba(255,255,255,.3);font-family:'Inter',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .burl.green{background:#0b1a10;color:#4db36e;}
-    .bopen{font-size:11px;color:var(--green-bright);text-decoration:none;font-weight:600;white-space:nowrap;padding-left:10px;}
-
-    /* comparison preview */
-    .prev-sm{width:100%;height:195px;overflow:hidden;background:#0b1a10;}
-    .prev-sm iframe{width:1200px;height:780px;transform:scale(0.315);transform-origin:top left;border:none;pointer-events:none;}
-    /* intern wireframe */
-    .wireframe{height:195px;background:#f0f0f4;padding:10px;}
-    .wf-nav{height:22px;background:#1a1a2e;border-radius:2px;margin-bottom:8px;}
-    .wf-hero{background:#e0e0ea;border-radius:3px;padding:12px;margin-bottom:8px;text-align:center;}
-    .wf-h1{height:9px;background:#b8b8cc;border-radius:2px;width:60%;margin:0 auto 6px;}
-    .wf-h2{height:6px;background:#ccccda;border-radius:2px;width:40%;margin:0 auto 10px;}
-    .wf-btn{height:16px;background:#9ca3af;border-radius:3px;width:25%;margin:0 auto;}
-    .wf-body{padding:8px 6px;}
-    .wf-line{height:6px;background:#dddde8;border-radius:2px;margin-bottom:5px;}
-    .wf-line.s{width:55%;}
-    .wf-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:6px;}
-    .wf-c{height:36px;background:#e4e4ee;border:1px solid #d0d0dc;border-radius:3px;}
-
-    /* full page preview */
-    .prev-lg{overflow:hidden;height:400px;background:#0b1a10;}
-    .prev-lg iframe{width:1440px;height:1050px;transform:scale(0.62);transform-origin:top left;border:none;pointer-events:none;}
-
-    /* flowchart iframe slide */
-    .chart-frame{width:100%;height:calc(100vh - 80px);overflow:hidden;background:#0a0a0f;}
-    .chart-frame iframe{width:100%;height:100%;border:none;}
-
-    /* stat row */
-    .stat-row{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin:24px 0;}
-    .si .n{font-size:clamp(30px,3.5vw,50px);font-weight:900;color:var(--green-bright);line-height:1;}
-    .si .n.red{color:#f87171;}
-    .si .l{font-size:12px;color:rgba(247,244,238,.45);margin-top:5px;font-weight:500;}
-
-    /* ── DELIVERABLE LINKS ── */
-    .deliverable-link{
-      display:block;text-decoration:none;
-      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-      border-radius:12px;padding:20px 22px;
-      transition:all .2s;cursor:pointer;
-    }
-    .deliverable-link:hover{background:var(--forest-light);border-color:var(--green);}
-    .dlbl-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-    .dext{font-size:12px;font-weight:700;color:var(--green-bright);}
-    .dtitle{font-size:16px;font-weight:800;color:var(--cream);margin-bottom:6px;line-height:1.25;}
-    .dsub{font-size:12px;color:rgba(247,244,238,.55);line-height:1.5;margin-bottom:10px;}
-    .durl{font-size:11px;color:rgba(247,244,238,.3);font-family:'Inter',monospace;}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ivy Brothers — Growth Partnership</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --f:#0b1a10;--fm:#152b1c;--fl:#1e3d28;
+  --g:#3a8c57;--gb:#4db36e;
+  --cr:#f7f4ee;--w:#fff;
+  --td:#141c26;--tm:#3d4a55;
+}
+html,body{height:100%;overflow:hidden;font-family:'Inter',-apple-system,sans-serif;background:var(--f);color:var(--cr);}
+.deck{width:100%;height:100vh;position:relative;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 64px;opacity:0;pointer-events:none;transition:opacity .28s ease;text-align:center;}
+.slide.active{opacity:1;pointer-events:all;}
+.dark{background:var(--f);}
+.mid{background:var(--fm);}
+.gbg{background:var(--g);}
+.rbg{background:#100202;}
+/* nav */
+.nb{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:200;}
+.nb button{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:#fff;padding:8px 18px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;}
+.nb button:hover{background:rgba(255,255,255,.18);}
+.dots{display:flex;gap:5px;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:background .15s;}
+.dot.active{background:var(--gb);}
+.snum{position:fixed;top:22px;right:28px;font-size:11px;font-weight:600;letter-spacing:.14em;color:rgba(255,255,255,.22);z-index:200;}
+/* type */
+.eye{font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gb);margin-bottom:16px;}
+.eye.r{color:#f87171;}.eye.d{color:rgba(255,255,255,.38);}
+h1{font-size:clamp(34px,4.6vw,64px);font-weight:900;line-height:1.05;letter-spacing:-.025em;margin-bottom:16px;}
+h2{font-size:clamp(24px,3vw,44px);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:12px;}
+.sub{font-size:clamp(13px,1.4vw,17px);color:rgba(247,244,238,.5);line-height:1.65;max-width:640px;margin:0 auto;}
+.sub.wt{color:rgba(255,255,255,.7);}
+.div{width:40px;height:3px;background:var(--g);border-radius:2px;margin:16px auto;}
+.div.w{background:rgba(255,255,255,.28);}
+/* grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;width:100%;max-width:960px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;width:100%;max-width:960px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:11px;width:100%;max-width:960px;}
+/* cards */
+.card{border-radius:11px;padding:20px 22px;text-align:left;}
+.cd{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);}
+.ch{background:var(--fl);border:1px solid var(--g);}
+.cg{background:var(--g);color:#fff;border:1px solid transparent;}
+.cr2{background:rgba(220,38,38,.09);border:1px solid rgba(220,38,38,.17);}
+.clbl{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.5;margin-bottom:7px;}
+.card h4{font-size:15px;font-weight:800;margin-bottom:6px;line-height:1.25;}
+.card p{font-size:12px;line-height:1.6;opacity:.72;}
+.bign{font-size:32px;font-weight:900;color:var(--gb);line-height:1;margin-bottom:4px;}
+.bign.r{color:#f87171;}.bign.w{color:#fff;}
+/* tags */
+.tag{display:inline-block;padding:3px 11px;border-radius:100px;font-size:10px;font-weight:700;}
+.tg{background:rgba(58,140,87,.17);color:var(--gb);border:1px solid rgba(58,140,87,.26);}
+.tr{background:rgba(220,38,38,.12);color:#f87171;border:1px solid rgba(220,38,38,.2);}
+.ty{background:rgba(234,179,8,.11);color:#fbbf24;border:1px solid rgba(234,179,8,.18);}
+.tc{background:rgba(247,244,238,.09);color:var(--cr);border:1px solid rgba(247,244,238,.16);}
+/* roadmap */
+.rm{width:100%;max-width:900px;border-collapse:collapse;font-size:12px;}
+.rm th{text-align:left;padding:8px 13px;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(247,244,238,.35);border-bottom:1px solid rgba(255,255,255,.07);}
+.rm td{padding:9px 13px;color:rgba(247,244,238,.72);border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;line-height:1.45;}
+.rm tr:last-child td{border-bottom:none;}
+.rm td:first-child{color:var(--cr);font-weight:600;white-space:nowrap;}
+/* split before/after */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:960px;text-align:left;align-items:start;}
+.sh{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:11px;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sh.g{color:var(--gb);}.sh.r{color:#f87171;}
+.ri{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;line-height:1.5;color:rgba(247,244,238,.72);}
+.ri:last-child{border-bottom:none;}
+.ri .ic{flex-shrink:0;}
+/* ── FLOWCHART ── */
+.flow-wrap{width:100%;max-width:960px;overflow-y:auto;max-height:calc(100vh - 160px);padding-bottom:10px;}
+.flow{display:flex;flex-direction:column;align-items:center;gap:0;}
+.fnode{
+  border-radius:10px;padding:11px 20px;font-size:13px;font-weight:700;
+  text-align:center;position:relative;z-index:1;
+  min-width:220px;max-width:480px;width:100%;
+}
+.fnode.stage{background:var(--fl);border:1px solid var(--g);color:var(--cr);}
+.fnode.stage.main{background:var(--g);border-color:var(--g);color:#fff;font-size:14px;}
+.fnode.touch{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:rgba(247,244,238,.7);font-size:12px;font-weight:400;}
+.fnode.outcome{background:rgba(58,140,87,.12);border:1px solid rgba(58,140,87,.25);color:var(--gb);font-size:12px;}
+.fnode.outcome.bad{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.2);color:#f87171;}
+.farr{font-size:16px;color:rgba(255,255,255,.2);line-height:1;padding:3px 0;flex-shrink:0;}
+.fbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:600;margin:2px 3px;}
+.fbadge.email{background:rgba(58,140,87,.18);color:var(--gb);border:1px solid rgba(58,140,87,.28);}
+.fbadge.sms{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.25);}
+.fbadge.call{background:rgba(168,85,247,.15);color:#c084fc;border:1px solid rgba(168,85,247,.25);}
+.touch-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:3px;padding:6px 12px;}
+.fgate{font-size:11px;color:rgba(247,244,238,.4);padding:2px 0;text-align:center;}
+.flow-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start;width:100%;max-width:480px;}
+.flow-branch{display:flex;flex-direction:column;align-items:center;gap:0;}
+.flow-branch-label{font-size:10px;color:rgba(247,244,238,.35);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 0;}
+.fspacer{height:4px;}
+/* script slide */
+.script-box{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;padding:24px 30px;max-width:780px;width:100%;
+  text-align:left;overflow-y:auto;max-height:calc(100vh - 200px);
+}
+.script-box .slabel{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gb);margin-bottom:16px;}
+.script-box p{font-size:14px;line-height:1.8;color:rgba(247,244,238,.82);margin-bottom:14px;}
+.script-box p:last-child{margin-bottom:0;}
+.script-box .highlight{color:var(--cr);font-weight:600;}
+.script-box .cta-line{font-size:15px;font-weight:700;color:var(--gb);margin-top:6px;}
+/* browser / previews */
+.browser{background:#0a0f0c;border:1px solid rgba(255,255,255,.09);border-radius:10px;overflow:hidden;width:100%;max-width:1000px;}
+.browser.gb2{border-color:var(--g);}
+.bbar{background:#111a14;border-bottom:1px solid rgba(255,255,255,.06);padding:7px 11px;display:flex;align-items:center;gap:9px;}
+.bdots{display:flex;gap:4px;}
+.bdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12);display:block;}
+.burl{flex:1;background:rgba(255,255,255,.05);border-radius:3px;padding:3px 8px;font-size:10px;color:rgba(255,255,255,.28);font-family:'Inter',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.burl.g{background:#0b1a10;color:#4db36e;}
+.bopen{font-size:11px;color:var(--gb);text-decoration:none;font-weight:700;white-space:nowrap;padding-left:9px;}
+.prev{overflow:hidden;height:390px;background:#0b1a10;}
+.prev iframe{width:1440px;height:1050px;transform:scale(0.62);transform-origin:top left;border:none;pointer-events:none;}
+/* comparison */
+.wireframe{height:190px;background:#f0f0f4;padding:9px;}
+.wf-nav{height:21px;background:#1a1a2e;border-radius:2px;margin-bottom:7px;}
+.wf-hero{background:#e0e0ea;border-radius:3px;padding:11px;margin-bottom:7px;text-align:center;}
+.wf-h1{height:8px;background:#b8b8cc;border-radius:2px;width:58%;margin:0 auto 5px;}
+.wf-h2{height:6px;background:#ccccda;border-radius:2px;width:38%;margin:0 auto 9px;}
+.wf-btn{height:15px;background:#9ca3af;border-radius:3px;width:24%;margin:0 auto;}
+.wf-body{padding:7px 5px;}
+.wf-line{height:5px;background:#dddde8;border-radius:2px;margin-bottom:4px;}
+.wf-line.s{width:52%;}
+.wf-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:5px;}
+.wf-c{height:34px;background:#e4e4ee;border:1px solid #d0d0dc;border-radius:2px;}
+.prev-sm{height:190px;overflow:hidden;background:#0b1a10;}
+.prev-sm iframe{width:1200px;height:760px;transform:scale(0.315);transform-origin:top left;border:none;pointer-events:none;}
+/* rev box */
+.rbox{background:var(--fl);border:2px solid var(--g);border-radius:14px;padding:30px 40px;max-width:500px;margin:0 auto;}
+.rbox .pct{font-size:66px;font-weight:900;color:var(--gb);line-height:1;letter-spacing:-.03em;}
+.rbox .plbl{font-size:14px;font-weight:600;color:rgba(247,244,238,.55);margin-bottom:20px;}
+.rbox ul{list-style:none;text-align:left;}
+.rbox ul li{font-size:13px;color:rgba(247,244,238,.78);padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:8px;}
+.rbox ul li:last-child{border-bottom:none;}
+.rbox ul li::before{content:"✓";color:var(--gb);flex-shrink:0;}
+/* steps */
+.steps{display:flex;flex-direction:column;gap:9px;width:100%;max-width:680px;margin:0 auto;}
+.step{display:flex;gap:14px;align-items:flex-start;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:14px 18px;}
+.sn2{width:28px;height:28px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;}
+.step h5{font-size:13px;font-weight:700;margin-bottom:2px;color:var(--cr);}
+.step p{font-size:11px;color:rgba(247,244,238,.5);line-height:1.5;}
+</style>
 </head>
 <body>
 <div class="deck">
 
-<!-- ══ 1 — COVER ══ -->
+<!-- 1 COVER -->
 <div class="slide dark active">
-  <div class="cover-logo" style="font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,244,238,.35);margin-bottom:44px;">Ivy Brothers <span style="color:var(--green-bright);">×</span> Marco Garcia</div>
+  <div style="font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,244,238,.3);margin-bottom:42px;">Ivy Brothers <span style="color:var(--gb);">×</span> Marco Garcia</div>
   <div class="eye">Growth Partnership</div>
   <h1>You're leaving<br>$500K on the table.</h1>
-  <div class="divider"></div>
+  <div class="div"></div>
   <p class="sub">Not because leads aren't coming in.<br>Because the system to catch them doesn't exist yet.</p>
 </div>
 
-<!-- ══ 2 — PROBLEMS RIGHT NOW ══ -->
+<!-- 2 PROBLEMS -->
 <div class="slide mid">
-  <div class="eye red">No Standardized Process</div>
-  <h2>$50–200K/mo. No system.</h2>
-  <div class="divider"></div>
-  <p class="sub" style="margin-bottom:22px;">You're already doing this with zero infrastructure. That's the point — imagine what happens when you add one.</p>
-  <div class="grid g2" style="max-width:900px;">
+  <div class="eye r">No Standardized Process</div>
+  <h2>$50–200K/mo. No system behind it.</h2>
+  <div class="div"></div>
+  <p class="sub" style="margin-bottom:20px;">You're already doing that number with handpicked outreach and no CRM. Imagine what happens when you add a system.</p>
+  <div class="g2">
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <div class="card cr">
-        <div class="clbl">Lead Handling</div>
-        <h4>No CRM. No tracking.</h4>
-        <p>Leads submit a form and go into a void. No record of who was contacted, who booked, who showed, who closed.</p>
-      </div>
-      <div class="card cr">
-        <div class="clbl">Outreach</div>
-        <h4>Handpicked. Manual. Inconsistent.</h4>
-        <p>The center decides who to call. Most leads are never touched. No setter workflow — just judgment calls.</p>
-      </div>
-      <div class="card cr">
-        <div class="clbl">Mid-Funnel</div>
-        <h4>Zero mid-funnel asset.</h4>
-        <p>"Interested but not ready" families have nowhere to go. No webinar, no briefing, no nurture. They bounce and never come back.</p>
-      </div>
+      <div class="card cr2"><div class="clbl">Lead Handling</div><h4>No CRM. No tracking.</h4><p>Leads submit a form and go into a void. No record of who was contacted, who booked, who showed, who closed.</p></div>
+      <div class="card cr2"><div class="clbl">Outreach</div><h4>Handpicked. Manual. No workflow.</h4><p>Center decides who to call. Most leads are never touched. No setter system — just judgment calls.</p></div>
+      <div class="card cr2"><div class="clbl">Mid-Funnel</div><h4>Zero mid-funnel asset.</h4><p>"Interested but not ready" families bounce and never come back. No briefing, no nurture, no sequence.</p></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <div class="card cr">
-        <div class="clbl">Attribution</div>
-        <h4>Revenue is invisible.</h4>
-        <p>No source tagging, no pipeline stages, no close rate data. Can't tell which channel works or what to double down on.</p>
-      </div>
-      <div class="card cr">
-        <div class="clbl">Tools</div>
-        <h4>Zapier + Instantly — billed separately, don't connect.</h4>
-        <p>Both replaced by GoHighLevel at $97/mo flat. One login. One system.</p>
-      </div>
-      <div class="card ch">
-        <div class="clbl">The Opportunity</div>
-        <div class="big-n" style="font-size:26px;color:var(--green-bright);">3–5x current revenue</div>
-        <p style="margin-top:4px;">is what standardized ops, a setter system, and a mid-funnel asset typically add — on an existing base that's already converting.</p>
-      </div>
+      <div class="card cr2"><div class="clbl">Attribution</div><h4>Revenue is invisible.</h4><p>No source tagging, no pipeline stages, no close rate. Can't tell what's working or what to scale.</p></div>
+      <div class="card cr2"><div class="clbl">Tools</div><h4>Zapier + Instantly — duplicate cost, no integration.</h4><p>Both replaced by GoHighLevel at $97/mo. One tool, one login.</p></div>
+      <div class="card ch"><div class="clbl">The Opportunity</div><div class="bign" style="font-size:24px;">3–5× current revenue</div><p>is what standardized ops typically adds on a base that's already converting without infrastructure.</p></div>
     </div>
   </div>
 </div>
 
-<!-- ══ 3 — 90-DAY ROADMAP ══ -->
+<!-- 3 90-DAY ROADMAP -->
 <div class="slide dark">
   <div class="eye">The 90-Day Plan</div>
-  <h2>What was agreed</h2>
-  <div class="divider"></div>
-  <div style="width:100%;max-width:920px;margin-top:16px;overflow:auto;max-height:55vh;">
-    <table class="roadmap">
-      <thead>
-        <tr>
-          <th>Week</th>
-          <th>Deliverable</th>
-          <th>Status</th>
-        </tr>
-      </thead>
+  <h2>What was agreed — what got deployed</h2>
+  <div class="div"></div>
+  <div style="width:100%;max-width:920px;overflow-y:auto;max-height:56vh;margin-top:14px;">
+    <table class="rm">
+      <thead><tr><th>Week</th><th>Deliverable</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>Wk 1</td><td>Fix site 404s · move Angela P quote to hero · UTM tracking · CRM audit · baseline metrics</td><td><span class="tag tr">Not executed</span></td></tr>
-        <tr><td>Wk 2</td><td>Speed-to-lead system · automated SMS + email under 5 min · calendar booking link · CRM setup (GoHighLevel)</td><td><span class="tag tr">Not executed</span></td></tr>
-        <tr><td>Wk 3</td><td>3-email pre-call sequence · knowledge base for setter team</td><td><span class="tag tr">Not executed</span></td></tr>
-        <tr><td>Wk 4</td><td>Setter hired + onboarded · ops dashboard v1 · weekly KPI review format</td><td><span class="tag tr">Not executed</span></td></tr>
-        <tr><td>Wk 5</td><td>Webinar strategy + registration page + reminder sequence</td><td><span class="tag ty">Partial</span></td></tr>
-        <tr><td>Wk 6</td><td>Broadcast email infrastructure · 2x/week cadence · re-engagement sequence</td><td><span class="tag tr">Not executed</span></td></tr>
-        <tr><td>Wk 7</td><td>Meta Pixel installed · custom audiences built · remarketing content</td><td><span class="tag tr">Not executed</span></td></tr>
+        <tr><td>Wk 1</td><td>Site 404 fixes · Angela P quote to hero · UTM tracking · CRM audit · baseline metrics</td><td><span class="tag tr">Not executed</span></td></tr>
+        <tr><td>Wk 2</td><td>Speed-to-lead · automated SMS + email under 5 min · calendar link · GoHighLevel CRM setup</td><td><span class="tag tr">Not executed</span></td></tr>
+        <tr><td>Wk 3</td><td>3-email pre-call sequence · setter knowledge base</td><td><span class="tag tr">Not executed</span></td></tr>
+        <tr><td>Wk 4</td><td>Setter hired + onboarded · ops dashboard · weekly KPI review</td><td><span class="tag tr">Not executed</span></td></tr>
+        <tr><td>Wk 5</td><td>Webinar strategy + registration page + reminder sequence</td><td><span class="tag ty">Partial — strategy + page built</span></td></tr>
+        <tr><td>Wk 6</td><td>Broadcast email infra · 2×/week cadence · re-engagement sequence</td><td><span class="tag tr">Not executed</span></td></tr>
+        <tr><td>Wk 7</td><td>Meta Pixel · custom audiences · remarketing content package</td><td><span class="tag tr">Not executed</span></td></tr>
         <tr><td>Wk 8</td><td>Closer hired · closer script + objection doc · lower-ticket offer scoped</td><td><span class="tag tr">Not executed</span></td></tr>
-        <tr><td>Wk 9–13</td><td>Paid ads launch · webinar run · Hook Program launch · referral program · 90-day review</td><td><span class="tag tr">Not executed</span></td></tr>
+        <tr><td>Wk 9–13</td><td>Paid ads · webinar run · Hook Program · referral program · 90-day review</td><td><span class="tag tr">Not executed</span></td></tr>
       </tbody>
     </table>
   </div>
-  <p class="sub" style="margin-top:16px;font-size:12px;">The plan was sound. The execution layer didn't get deployed. That's what this engagement is for.</p>
+  <p class="sub" style="margin-top:14px;font-size:12px;">The plan was solid. The execution layer never deployed. That's what this engagement is for.</p>
 </div>
 
-<!-- ══ 4 — BEFORE / AFTER ══ -->
+<!-- 4 BEFORE / AFTER -->
 <div class="slide mid">
   <div class="eye">Before / After</div>
   <h2>What Marco built</h2>
-  <div class="divider"></div>
-  <div class="split" style="margin-top:20px;max-width:940px;">
-    <!-- BEFORE -->
+  <div class="div"></div>
+  <div class="split" style="margin-top:18px;">
     <div>
-      <div class="split-head red">Before — What existed</div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No market research or competitive analysis</span></div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No defined unique mechanism or positioning</span></div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No webinar strategy or mid-funnel asset</span></div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No brand voice documented</span></div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No growth plan or phased roadmap</span></div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No setter job posting or hiring process</span></div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No live webinar or course page</span></div>
-      <div class="row-item"><span class="ic">⬜</span><span class="txt">No sales ops flowchart or CRM blueprint</span></div>
+      <div class="sh r">Before — What existed</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No market research or competitive analysis</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No unique mechanism or positioning</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No webinar strategy or mid-funnel asset</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No brand voice documented</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No phased growth plan or roadmap</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No setter job posting or hiring process</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No live webinar or course page</div>
+      <div class="ri"><span class="ic" style="color:#4b5563;">⬜</span>No sales ops system or CRM blueprint</div>
     </div>
-    <!-- AFTER -->
     <div>
-      <div class="split-head green">After — What Marco delivered</div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>Full market research</strong> — 18-field research foundation, competitor analysis</span></div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>Unique mechanism</strong> — Applicant Architecture System (Hook → Credential → Roundtable)</span></div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>Webinar strategy v1 + v2</strong> — Swiss family story, Tyson, 3 Questions framework, Jake's close script</span></div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>Brand voice extracted</strong> — 71/100 score, tone rules, vocabulary, signature lines</span></div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>90-day growth plan</strong> — phased roadmap, dashboards, revenue model</span></div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>Setter job posting</strong> — drafted and ready to deploy</span></div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>webinar.html + course.html</strong> — live on GitHub Pages, brand-matched, conversion-optimized</span></div>
-      <div class="row-item"><span class="ic" style="color:var(--green-bright);">✓</span><span class="txt"><strong>Full sales ops flowchart + CRM blueprint</strong> — setter workflow, objection handling, GHL stack</span></div>
+      <div class="sh g">After — Marco delivered</div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">Market research</strong> — 18-field foundation, competitor analysis</span></div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">Applicant Architecture System</strong> — Hook → Credential → Roundtable</span></div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">Webinar strategy v1 + v2</strong> — Swiss family, Tyson, 3 Questions, Jake's close script</span></div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">Brand voice</strong> — 71/100 score, tone rules, vocabulary, signature lines</span></div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">90-day growth plan</strong> — phased roadmap, dashboards, revenue model</span></div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">Setter job posting</strong> — ready to deploy</span></div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">webinar.html + course.html</strong> — live on GitHub Pages</span></div>
+      <div class="ri"><span class="ic" style="color:var(--gb);">✓</span><span><strong style="color:var(--cr);">Full sales ops flowchart + CRM blueprint</strong></span></div>
     </div>
   </div>
 </div>
 
-<!-- ══ 5 — DELIVERABLES ══ -->
+<!-- 5 SALES PIPELINE FLOWCHART -->
 <div class="slide dark">
-  <div class="eye">Live Deliverables</div>
-  <h2>Everything built. All live.</h2>
-  <div class="divider"></div>
-  <div class="grid g2" style="margin-top:20px;max-width:900px;">
-    <a href="https://mxwallz.github.io/ivy-brothers-site/webinar.html" target="_blank" class="deliverable-link">
-      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
-      <div class="dtitle">Webinar Registration Page</div>
-      <div class="dsub">Brand-matched, conversion-optimized. Sticky topbar, social proof, above-fold CTA.</div>
-      <div class="durl">ivy-brothers-site/webinar.html</div>
-    </a>
-    <a href="https://mxwallz.github.io/ivy-brothers-site/course.html" target="_blank" class="deliverable-link">
-      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
-      <div class="dtitle">Hook Program — Course Page</div>
-      <div class="dsub">Lower-ticket entry point ($497–997). Downsell path. Post-purchase upsell to full program.</div>
-      <div class="durl">ivy-brothers-site/course.html</div>
-    </a>
-    <a href="https://mxwallz.github.io/ivy-pitch/" target="_blank" class="deliverable-link">
-      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
-      <div class="dtitle">Sales Ops Flowchart</div>
-      <div class="dsub">Full CRM + setter workflow, application gate flow, webinar funnel, CRM comparison, KPIs.</div>
-      <div class="durl">mxwallz.github.io/ivy-pitch/</div>
-    </a>
-    <a href="https://mxwallz.github.io/ivy-deck/" target="_blank" class="deliverable-link">
-      <div class="dlbl-row"><span class="tag tg" style="font-size:10px;">Live</span><span class="dext">Open ↗</span></div>
-      <div class="dtitle">This Pitch Deck</div>
-      <div class="dsub">13-slide partnership deck. Shareable link. Arrow-key navigation. Mobile responsive.</div>
-      <div class="durl">mxwallz.github.io/ivy-deck/</div>
-    </a>
-  </div>
-  <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-    <div class="card cd" style="padding:14px 20px;text-align:left;max-width:900px;width:100%;display:flex;gap:24px;flex-wrap:wrap;">
-      <div style="font-size:11px;color:rgba(247,244,238,.4);text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:6px;width:100%;">Strategy Docs (in vault)</div>
-      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Research foundation (18 fields)</div>
-      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Unique mechanism doc</div>
-      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Webinar strategy v1 + v2</div>
-      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Brand voice (71/100)</div>
-      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ 90-day growth plan</div>
-      <div style="font-size:12px;color:rgba(247,244,238,.6);">✓ Setter job posting</div>
+  <div class="eye d">Sales Pipeline</div>
+  <h2 style="margin-bottom:4px;">Lead → Close — Every Touchpoint</h2>
+  <p class="sub" style="margin-bottom:16px;font-size:12px;"><span class="fbadge email">📧 Email</span> <span class="fbadge sms">📱 Text</span> <span class="fbadge call">📞 Call</span> — all touchpoints built and documented</p>
+  <div class="flow-wrap">
+    <div class="flow">
+
+      <div class="fnode stage main">Lead Comes In<br><span style="font-size:11px;font-weight:400;opacity:.75;">apply.html · site form · DM · referral · paid ad</span></div>
+      <div class="farr">↓</div>
+
+      <div class="fnode touch">
+        <div class="touch-badges">
+          <span class="fbadge email">📧 Auto-email — within 5 min</span>
+          <span class="fbadge sms">📱 Auto-SMS — within 5 min</span>
+        </div>
+        <div style="font-size:11px;color:rgba(247,244,238,.4);margin-top:2px;">Booking link delivered immediately</div>
+      </div>
+      <div class="farr">↓</div>
+
+      <div class="fnode stage">Setter Calls Everyone — Same Day<br><span style="font-size:11px;font-weight:400;opacity:.65;">No cherry-picking. Every lead gets a touchpoint.</span></div>
+      <div class="farr">↓</div>
+
+      <div style="display:grid;grid-template-columns:1fr 32px 1fr;gap:6px;width:100%;max-width:520px;align-items:start;">
+        <div class="flow-branch">
+          <div class="flow-branch-label">Not qualified</div>
+          <div class="fnode outcome bad" style="width:100%;font-size:11px;">
+            <span class="fbadge email" style="font-size:10px;">📧 Nurture email</span><br>
+            <span style="font-size:10px;">Hook Program path · $497–997</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;padding-top:24px;color:rgba(255,255,255,.15);font-size:12px;">↕</div>
+        <div class="flow-branch">
+          <div class="flow-branch-label">Qualified</div>
+          <div class="fnode stage" style="width:100%;">Call Booked in CRM</div>
+        </div>
+      </div>
+      <div class="farr">↓</div>
+
+      <div class="fnode touch">
+        <div class="touch-badges">
+          <span class="fbadge email">📧 Email 1: Confirmation + credibility — immediately</span>
+          <span class="fbadge email">📧 Email 2: Student story — 24hrs before</span>
+          <span class="fbadge sms">📱 Text: Reminder + link — 1hr before</span>
+        </div>
+      </div>
+      <div class="farr">↓</div>
+
+      <div style="display:grid;grid-template-columns:1fr 32px 1fr;gap:6px;width:100%;max-width:520px;align-items:start;">
+        <div class="flow-branch">
+          <div class="flow-branch-label">No show</div>
+          <div class="fnode outcome bad" style="width:100%;font-size:11px;">
+            <span class="fbadge sms" style="font-size:10px;">📱 Setter texts within 1hr</span><br>
+            <span class="fbadge call" style="font-size:10px;">📞 Reschedule call</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;padding-top:24px;color:rgba(255,255,255,.15);font-size:12px;">↕</div>
+        <div class="flow-branch">
+          <div class="flow-branch-label">Showed</div>
+          <div class="fnode stage" style="width:100%;">Closer Takes Call</div>
+        </div>
+      </div>
+      <div class="farr">↓</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;width:100%;max-width:560px;">
+        <div class="fnode outcome" style="font-size:11px;text-align:center;">
+          <div style="font-weight:700;margin-bottom:4px;">Won ✓</div>
+          <span class="fbadge email" style="font-size:10px;">📧 Onboarding sequence</span>
+        </div>
+        <div class="fnode outcome bad" style="font-size:11px;text-align:center;">
+          <div style="font-weight:700;margin-bottom:4px;">Price</div>
+          <span class="fbadge email" style="font-size:10px;">📧 Hook Program downsell</span>
+        </div>
+        <div class="fnode outcome bad" style="font-size:11px;text-align:center;">
+          <div style="font-weight:700;margin-bottom:4px;">Not ready</div>
+          <span class="fbadge email" style="font-size:10px;">📧 60-day nurture sequence</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- ══ 6 — THE SYSTEM FLOWCHART ══ -->
-<div class="slide flush">
-  <div style="position:absolute;top:0;left:0;right:0;height:52px;background:var(--forest);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:10;border-bottom:1px solid rgba(255,255,255,.07);">
-    <div class="eye" style="margin:0;font-size:10px;">The Proposed System</div>
-    <a href="https://mxwallz.github.io/ivy-pitch/" target="_blank" style="font-size:11px;color:var(--green-bright);text-decoration:none;font-weight:600;">Open full doc ↗</a>
-  </div>
-  <div class="chart-frame" style="margin-top:52px;height:calc(100vh - 52px);">
-    <iframe src="https://mxwallz.github.io/ivy-pitch/" title="Sales ops flowchart" loading="lazy"></iframe>
-  </div>
-</div>
-
-<!-- ══ 6 — THE PRIVATE BRIEFING ══ -->
+<!-- 6 BRIEFING FLOWCHART -->
 <div class="slide dark">
-  <div class="eye">The Flagship Asset</div>
-  <h2>The Private Briefing</h2>
-  <div class="divider"></div>
-  <div class="split" style="margin-top:22px;">
-    <div>
-      <p style="font-size:14px;color:rgba(247,244,238,.6);line-height:1.7;margin-bottom:20px;">Not a webinar. An application-gated, invite-only session with a former Stanford Admissions Officer. 20 families. AO is only paid after seat 20 is confirmed.</p>
-      <ul class="blist" style="max-width:100%;">
-        <li><span class="ic" style="color:var(--green-bright);">✦</span><span>Families apply at theivybrothers.com/apply</span></li>
-        <li><span class="ic" style="color:var(--green-bright);">✦</span><span>Setter contacts every applicant — accepted or not</span></li>
-        <li><span class="ic" style="color:var(--green-bright);">✦</span><span>AO contracted only after seat 20 confirmed</span></li>
-        <li><span class="ic" style="color:var(--green-bright);">✦</span><span>90 min: Swiss family → Tyson → 3 Questions → close</span></li>
-        <li><span class="ic" style="color:var(--green-bright);">✦</span><span>Close offer: Roundtable Preview Call — free, 20 min</span></li>
-      </ul>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div class="card cg">
-        <div class="clbl" style="color:rgba(255,255,255,.55);">30% close · 20 families · $20K avg</div>
-        <div class="big-n w">$120K</div>
-        <p>per session minimum</p>
+  <div class="eye d">Private Briefing</div>
+  <h2 style="margin-bottom:4px;">Application → 20 Seats → AO → Close</h2>
+  <p class="sub" style="margin-bottom:16px;font-size:12px;"><span class="fbadge email">📧 Email</span> <span class="fbadge sms">📱 Text</span> — every touchpoint in the briefing funnel</p>
+  <div class="flow-wrap">
+    <div class="flow">
+
+      <div class="fnode stage main">Family Applies — apply.html<br><span style="font-size:11px;font-weight:400;opacity:.75;">Name · school · grade · country · target schools · concern</span></div>
+      <div class="farr">↓</div>
+
+      <div class="fnode touch">
+        <div class="touch-badges">
+          <span class="fbadge email">📧 Auto-confirm — "We'll be in touch in 48hrs"</span>
+          <span class="fbadge call">📞 Setter calls every applicant — within 24hrs</span>
+        </div>
       </div>
-      <div class="card cg">
-        <div class="clbl" style="color:rgba(255,255,255,.55);">50% close · 20 families · $20K avg</div>
-        <div class="big-n w">$200K</div>
-        <p>per session</p>
+      <div class="farr">↓</div>
+
+      <div class="fnode stage">IB Reviews Application — 24hrs</div>
+      <div class="farr">↓</div>
+
+      <div style="display:grid;grid-template-columns:1fr 32px 1fr;gap:6px;width:100%;max-width:560px;align-items:start;">
+        <div class="flow-branch">
+          <div class="flow-branch-label">Waitlisted</div>
+          <div class="fnode outcome bad" style="width:100%;font-size:11px;">
+            <span class="fbadge email" style="font-size:10px;">📧 Warm hold email</span><br>
+            <span style="font-size:10px;opacity:.7;">Priority list · next session</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;padding-top:24px;color:rgba(255,255,255,.15);font-size:12px;">↕</div>
+        <div class="flow-branch">
+          <div class="flow-branch-label">Accepted</div>
+          <div class="fnode touch" style="width:100%;">
+            <span class="fbadge email" style="font-size:10px;">📧 Personal invitation from Jake</span><br>
+            <span style="font-size:10px;opacity:.6;margin-top:3px;display:block;">Seat held 48hrs</span>
+          </div>
+        </div>
       </div>
-      <div class="card cd">
-        <div class="clbl">AO fee recovered</div>
-        <div class="big-n" style="font-size:24px;">On close #1</div>
-        <p style="font-size:12px;">$2–5K fee. First close covers it.</p>
+      <div class="farr">↓</div>
+
+      <div class="fnode stage">Seat Confirmed — 20 seats = AO Contracted</div>
+      <div class="farr">↓</div>
+
+      <div class="fnode touch">
+        <div class="touch-badges">
+          <span class="fbadge email">📧 Email 1: Confirmation + what to expect</span>
+          <span class="fbadge email">📧 Email 2: 3 Questions homework — 24hrs before</span>
+          <span class="fbadge sms">📱 Text: Link + "we start on time" — 1hr before</span>
+        </div>
       </div>
+      <div class="farr">↓</div>
+
+      <div class="fnode stage main">Private Briefing — 90 Min · 20 Families · Stanford AO</div>
+      <div class="farr">↓</div>
+
+      <div class="fnode touch">
+        <div class="touch-badges">
+          <span class="fbadge email">📧 Email 1: Replay + Roundtable CTA — same day</span>
+          <span class="fbadge email">📧 Email 2: International OR Domestic variant — 48hrs</span>
+          <span class="fbadge email">📧 Email 3: Last call — spots closing — 5 days</span>
+        </div>
+      </div>
+      <div class="farr">↓</div>
+
+      <div class="fnode stage">Roundtable Preview Call Booked → Closer Closes</div>
+      <div class="farr">↓</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;max-width:420px;">
+        <div class="fnode outcome" style="text-align:center;font-size:12px;">Won ✓<br><span class="fbadge email" style="font-size:10px;">📧 Onboarding</span></div>
+        <div class="fnode outcome bad" style="text-align:center;font-size:12px;">Not yet<br><span class="fbadge email" style="font-size:10px;">📧 Nurture sequence</span></div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- ══ 7 — WORK QUALITY ══ -->
+<!-- 7 CLOSE SCRIPT -->
 <div class="slide mid">
+  <div class="eye">The Close — Jake's Script</div>
+  <h2 style="margin-bottom:4px;">What gets said in the last 8 minutes</h2>
+  <p class="sub" style="margin-bottom:18px;font-size:12px;">Jake owns this fully. AO steps back. This is practitioner to parent.</p>
+  <div class="script-box">
+    <div class="slabel">Jake's Close — Verbatim</div>
+    <p>"Before I let you go, I want to tell you something honestly.</p>
+    <p>Everything we talked about tonight — the spike, the credential stack, the Roundtable — <span class="highlight">this is the system.</span> It works. We have 200+ students who got into their first-choice schools because of it. Our first-choice admission rate is 98.4%. Angela P., the former Dean of Admissions at Yale, called us 'the only admissions agency that delivers results every time.'</p>
+    <p>But here's what I also know: most families on this call are going to leave tonight thinking 'we need to do something about this' — and then life gets in the way, the school year starts, and six months from now they're asking themselves why they waited.</p>
+    <p><span class="highlight">The families who don't do that are the ones who take one next step tonight.</span></p>
+    <p>Here's what I'm offering every family on this call. A 20-minute Roundtable Preview Call. One of our former admissions officers will read your student's current profile — what they have today — and give you three specific things: where the spike opportunity is, what credential gaps exist, and what is realistically buildable in your remaining timeline. No generic advice. Specific to your student.</p>
+    <p>You leave that call with a plan regardless of whether you work with us.</p>
+    <p class="cta-line">Spots are limited to what our team can actually run this week. The link is in the chat right now. Fill it in before you close this window."</p>
+  </div>
+</div>
+
+<!-- 8 WORK QUALITY -->
+<div class="slide dark">
   <div class="eye">Work Quality</div>
   <h2 style="margin-bottom:6px;">Intern build vs. what Marco builds</h2>
-  <p class="sub" style="margin-bottom:20px;font-size:13px;">Same brief. Different output. The gap shows in conversion.</p>
-  <div class="grid g2" style="max-width:1000px;align-items:start;">
-    <!-- INTERN -->
+  <p class="sub" style="margin-bottom:18px;font-size:12px;">Same brief. Different output. The gap shows in conversion.</p>
+  <div class="g2" style="align-items:start;">
     <div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="tag tr">Intern Build</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;"><span class="tag tr">Intern Build</span></div>
       <div class="browser">
         <div class="bbar"><div class="bdots"><span></span><span></span><span></span></div><div class="burl">theivybrothers.com</div></div>
         <div class="wireframe">
@@ -399,91 +428,86 @@
           <div class="wf-body"><div class="wf-line"></div><div class="wf-line s"></div><div class="wf-line"></div><div class="wf-g"><div class="wf-c"></div><div class="wf-c"></div><div class="wf-c"></div></div></div>
         </div>
       </div>
-      <div style="margin-top:10px;display:flex;flex-direction:column;gap:4px;">
-        <div style="font-size:12px;color:rgba(247,244,238,.4);display:flex;gap:7px;"><span style="color:#f87171;">✕</span>No conversion hierarchy</div>
-        <div style="font-size:12px;color:rgba(247,244,238,.4);display:flex;gap:7px;"><span style="color:#f87171;">✕</span>Generic copy, no ICP language</div>
-        <div style="font-size:12px;color:rgba(247,244,238,.4);display:flex;gap:7px;"><span style="color:#f87171;">✕</span>No social proof placement</div>
-        <div style="font-size:12px;color:rgba(247,244,238,.4);display:flex;gap:7px;"><span style="color:#f87171;">✕</span>No CTA above fold</div>
+      <div style="margin-top:9px;display:flex;flex-direction:column;gap:3px;text-align:left;">
+        <div style="font-size:11px;color:rgba(247,244,238,.38);display:flex;gap:6px;"><span style="color:#f87171;">✕</span>No conversion hierarchy</div>
+        <div style="font-size:11px;color:rgba(247,244,238,.38);display:flex;gap:6px;"><span style="color:#f87171;">✕</span>Generic copy, no ICP language</div>
+        <div style="font-size:11px;color:rgba(247,244,238,.38);display:flex;gap:6px;"><span style="color:#f87171;">✕</span>No social proof placement</div>
+        <div style="font-size:11px;color:rgba(247,244,238,.38);display:flex;gap:6px;"><span style="color:#f87171;">✕</span>No CTA above fold</div>
       </div>
     </div>
-    <!-- MARCO -->
     <div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="tag tg">Marco Build</span></div>
-      <div class="browser gb">
-        <div class="bbar" style="background:#0d2318;border-bottom-color:#1e3d28;"><div class="bdots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div><div class="burl green">mxwallz.github.io/ivy-brothers-site/webinar.html</div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;"><span class="tag tg">Marco Build</span><a href="https://mxwallz.github.io/ivy-brothers-site/webinar.html" target="_blank" style="font-size:11px;color:var(--gb);text-decoration:none;font-weight:700;">Open ↗</a></div>
+      <div class="browser gb2">
+        <div class="bbar" style="background:#0d2318;border-bottom-color:#1e3d28;"><div class="bdots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div><div class="burl g">ivy-brothers-site/webinar.html</div></div>
         <div class="prev-sm"><iframe src="https://mxwallz.github.io/ivy-brothers-site/webinar.html" scrolling="no" loading="lazy"></iframe></div>
       </div>
-      <div style="margin-top:10px;display:flex;flex-direction:column;gap:4px;">
-        <div style="font-size:12px;color:rgba(247,244,238,.75);display:flex;gap:7px;"><span style="color:var(--green-bright);">✓</span>Brand-matched design (forest / green)</div>
-        <div style="font-size:12px;color:rgba(247,244,238,.75);display:flex;gap:7px;"><span style="color:var(--green-bright);">✓</span>ICP-specific copy + social proof</div>
-        <div style="font-size:12px;color:rgba(247,244,238,.75);display:flex;gap:7px;"><span style="color:var(--green-bright);">✓</span>Conversion hierarchy, above-fold CTA</div>
-        <div style="font-size:12px;color:rgba(247,244,238,.75);display:flex;gap:7px;"><span style="color:var(--green-bright);">✓</span>Live on GitHub Pages, mobile responsive</div>
+      <div style="margin-top:9px;display:flex;flex-direction:column;gap:3px;text-align:left;">
+        <div style="font-size:11px;color:rgba(247,244,238,.75);display:flex;gap:6px;"><span style="color:var(--gb);">✓</span>Brand-matched (forest / green)</div>
+        <div style="font-size:11px;color:rgba(247,244,238,.75);display:flex;gap:6px;"><span style="color:var(--gb);">✓</span>ICP-specific copy + social proof</div>
+        <div style="font-size:11px;color:rgba(247,244,238,.75);display:flex;gap:6px;"><span style="color:var(--gb);">✓</span>Conversion hierarchy, above-fold CTA</div>
+        <div style="font-size:11px;color:rgba(247,244,238,.75);display:flex;gap:6px;"><span style="color:var(--gb);">✓</span>Live, mobile responsive</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ 8 — WEBINAR PAGE LIVE ══ -->
+<!-- 9 WEBINAR LIVE -->
 <div class="slide dark">
-  <div class="eye dim">Live Example — Webinar Page</div>
-  <h2 style="margin-bottom:6px;">Webinar Registration Page</h2>
-  <p class="sub" style="margin-bottom:16px;font-size:13px;">Built and live now.</p>
-  <div style="width:100%;max-width:1000px;">
-    <div class="browser gb">
-      <div class="bbar" style="background:#0d2318;border-bottom-color:#1e3d28;">
-        <div class="bdots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div>
-        <div class="burl green">mxwallz.github.io/ivy-brothers-site/webinar.html</div>
-        <a class="bopen" href="https://mxwallz.github.io/ivy-brothers-site/webinar.html" target="_blank">Open ↗</a>
-      </div>
-      <div class="prev-lg"><iframe src="https://mxwallz.github.io/ivy-brothers-site/webinar.html" scrolling="no" loading="lazy"></iframe></div>
+  <div class="eye d">Live — Webinar Page</div>
+  <h2 style="margin-bottom:6px;">Registration Page</h2>
+  <p class="sub" style="margin-bottom:14px;font-size:12px;">Built. Live now.</p>
+  <div class="browser gb2" style="max-width:1000px;">
+    <div class="bbar" style="background:#0d2318;border-bottom-color:#1e3d28;">
+      <div class="bdots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div>
+      <div class="burl g">mxwallz.github.io/ivy-brothers-site/webinar.html</div>
+      <a class="bopen" href="https://mxwallz.github.io/ivy-brothers-site/webinar.html" target="_blank">Open ↗</a>
     </div>
+    <div class="prev"><iframe src="https://mxwallz.github.io/ivy-brothers-site/webinar.html" scrolling="no" loading="lazy"></iframe></div>
   </div>
 </div>
 
-<!-- ══ 9 — COURSE PAGE LIVE ══ -->
+<!-- 10 COURSE LIVE -->
 <div class="slide dark">
-  <div class="eye dim">Live Example — Course Page</div>
-  <h2 style="margin-bottom:6px;">Hook Program — Lower Ticket Entry</h2>
-  <p class="sub" style="margin-bottom:16px;font-size:13px;">Downsell path. Captures families not ready for the full program. $497–997.</p>
-  <div style="width:100%;max-width:1000px;">
-    <div class="browser gb">
-      <div class="bbar" style="background:#0d2318;border-bottom-color:#1e3d28;">
-        <div class="bdots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div>
-        <div class="burl green">mxwallz.github.io/ivy-brothers-site/course.html</div>
-        <a class="bopen" href="https://mxwallz.github.io/ivy-brothers-site/course.html" target="_blank">Open ↗</a>
-      </div>
-      <div class="prev-lg"><iframe src="https://mxwallz.github.io/ivy-brothers-site/course.html" scrolling="no" loading="lazy"></iframe></div>
+  <div class="eye d">Live — Course Page</div>
+  <h2 style="margin-bottom:6px;">Hook Program — $497–997</h2>
+  <p class="sub" style="margin-bottom:14px;font-size:12px;">Downsell path. Captures families not ready for the full program.</p>
+  <div class="browser gb2" style="max-width:1000px;">
+    <div class="bbar" style="background:#0d2318;border-bottom-color:#1e3d28;">
+      <div class="bdots"><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span><span style="background:#3a8c57;"></span></div>
+      <div class="burl g">mxwallz.github.io/ivy-brothers-site/course.html</div>
+      <a class="bopen" href="https://mxwallz.github.io/ivy-brothers-site/course.html" target="_blank">Open ↗</a>
     </div>
+    <div class="prev"><iframe src="https://mxwallz.github.io/ivy-brothers-site/course.html" scrolling="no" loading="lazy"></iframe></div>
   </div>
 </div>
 
-<!-- ══ 10 — REVENUE MODEL ══ -->
+<!-- 11 REVENUE -->
 <div class="slide mid">
   <div class="eye">90-Day Model</div>
   <h2>What this is worth</h2>
-  <div class="divider"></div>
-  <div class="grid g2" style="margin-top:20px;max-width:860px;">
+  <div class="div"></div>
+  <div class="g2" style="margin-top:18px;">
     <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="card cd"><div class="clbl">CRM + Setter</div><h4>Speed-to-lead uplift</h4><p>+20% close rate on current leads. Every untouched lead today is upside once the setter has a queue.</p></div>
-      <div class="card cd"><div class="clbl">Setter (15–20 calls/wk)</div><h4>$50–80K/mo</h4><p>15–20 qualified calls/week at $15K avg deal size.</p></div>
-      <div class="card cd"><div class="clbl">Hook Program</div><h4>$24–40K/mo</h4><p>30–50 units at $797 avg. Downsell + standalone. Post-purchase upsell path.</p></div>
+      <div class="card cd"><div class="clbl">Setter (15–20 calls/wk)</div><h4>$50–80K/mo</h4><p>Structured outreach at $15K avg deal size.</p></div>
+      <div class="card cd"><div class="clbl">Hook Program</div><h4>$24–40K/mo</h4><p>30–50 units at $797 avg. Downsell + standalone + upsell.</p></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <div class="card ch"><div class="clbl">Private Briefing (2 sessions)</div><h4>$240–400K</h4><p>2 × 20 families. 30–50% close at $20K avg. AO cost recovered on close #1.</p></div>
-      <div class="card cd"><div class="clbl">Referral Program</div><h4>$75–150K</h4><p>5–10 referrals over 90 days from existing client base. Untapped right now.</p></div>
-      <div class="card cg"><div class="clbl" style="color:rgba(255,255,255,.55);">90-Day Target</div><div class="big-n w" style="font-size:42px;">$300–500K</div><p>Net new attributed revenue</p></div>
+      <div class="card ch"><div class="clbl">Private Briefing — 2 sessions</div><h4>$240–400K</h4><p>20 families × 2 sessions. 30–50% close at $20K avg. AO fee recovered on close #1.</p></div>
+      <div class="card cd"><div class="clbl">Referral Program</div><h4>$75–150K</h4><p>5–10 referrals from existing client base. Untapped right now.</p></div>
+      <div class="card cg"><div class="clbl" style="color:rgba(255,255,255,.5);">90-Day Target</div><div class="bign w" style="font-size:40px;">$300–500K</div><p>Net new attributed revenue</p></div>
     </div>
   </div>
 </div>
 
-<!-- ══ 11 — COMPENSATION ══ -->
+<!-- 12 COMPENSATION -->
 <div class="slide dark">
   <div class="eye">The Deal</div>
   <h2>Simple. Performance-based.</h2>
-  <div class="divider"></div>
-  <div class="rev-box" style="margin-top:24px;">
+  <div class="div"></div>
+  <div class="rbox" style="margin-top:22px;">
     <div class="pct">10–15%</div>
-    <div class="pct-lbl">of directly attributable revenue</div>
+    <div class="plbl">of directly attributable revenue</div>
     <ul>
       <li>Any lead entering through systems Marco builds</li>
       <li>Source-tagged in GHL from day 1 — no ambiguity</li>
@@ -492,29 +516,29 @@
       <li>No revenue generated = nothing owed</li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:20px;font-size:12px;">"Directly attributable" = any lead through the CRM, application funnel, briefing, or email sequences Marco builds and manages.</p>
+  <p class="sub" style="margin-top:18px;font-size:12px;">"Directly attributable" = any lead through the CRM, application funnel, briefing, or email sequences Marco builds and manages.</p>
 </div>
 
-<!-- ══ 12 — NEXT STEPS ══ -->
+<!-- 13 NEXT STEPS -->
 <div class="slide mid">
   <div class="eye">What Happens Next</div>
   <h2>Four things to unlock</h2>
-  <div class="divider"></div>
-  <div class="steps" style="margin-top:20px;">
-    <div class="step"><div class="step-n">1</div><div><h5>Confirm the Stanford AO</h5><p>Name + credential needed before apply.html goes live. This is the #1 application conversion driver.</p></div></div>
-    <div class="step"><div class="step-n">2</div><div><h5>Provision GoHighLevel</h5><p>Replaces Zapier + Instantly from day 1. CRM is the foundation — nothing else runs without it.</p></div></div>
-    <div class="step"><div class="step-n">3</div><div><h5>Build apply.html on existing site</h5><p>Live at theivybrothers.com/apply. Application form → CRM → setter assigned. GitHub repo is ready.</p></div></div>
-    <div class="step"><div class="step-n">4</div><div><h5>Lock the first briefing date</h5><p>Target August–September. Date set → applications open → room fills → AO contracted.</p></div></div>
+  <div class="div"></div>
+  <div class="steps" style="margin-top:18px;">
+    <div class="step"><div class="sn2">1</div><div><h5>Confirm the Stanford AO</h5><p>Name + credential before apply.html goes live. This is the #1 application conversion driver.</p></div></div>
+    <div class="step"><div class="sn2">2</div><div><h5>Provision GoHighLevel</h5><p>Replaces Zapier + Instantly from day 1. CRM is the foundation before the setter starts.</p></div></div>
+    <div class="step"><div class="sn2">3</div><div><h5>Build apply.html on existing site</h5><p>Live at theivybrothers.com/apply. Form → CRM → setter assigned. GitHub repo is ready.</p></div></div>
+    <div class="step"><div class="sn2">4</div><div><h5>Lock the first briefing date</h5><p>Target August–September. Date set → applications open → room fills → AO contracted.</p></div></div>
   </div>
 </div>
 
-<!-- ══ 13 — CLOSE ══ -->
-<div class="slide green-bg">
-  <div class="eye" style="color:rgba(255,255,255,.6);">Let's Build</div>
-  <h1 style="color:#fff;font-size:clamp(34px,4.5vw,60px);">The foundation is built.<br>Now we execute.</h1>
-  <div class="divider w"></div>
-  <p class="sub wt" style="margin-bottom:32px;">Every week without a setter system is compounding loss.<br>The briefing alone covers the engagement on session one.</p>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+<!-- 14 CLOSE -->
+<div class="slide gbg">
+  <div class="eye" style="color:rgba(255,255,255,.55);">Let's Build</div>
+  <h1 style="color:#fff;font-size:clamp(32px,4.2vw,58px);">The foundation is built.<br>Now we execute.</h1>
+  <div class="div w"></div>
+  <p class="sub wt" style="margin-bottom:28px;">Every week without a setter system is compounding loss.<br>The briefing alone covers the engagement on session one.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
     <span class="tag tc">10–15% rev share</span>
     <span class="tag tc">Performance-based</span>
     <span class="tag tc">90-day sprint</span>
@@ -522,52 +546,37 @@
   </div>
 </div>
 
-</div><!-- /deck -->
+</div>
 
-<div class="slide-num" id="snum">1 / 13</div>
-<div class="nav-bar" id="navbar">
-  <button id="prev" onclick="go(-1)">← Prev</button>
-  <div class="dots" id="dotrow"></div>
-  <button id="next" onclick="go(1)">Next →</button>
+<div class="snum" id="sn">1 / 14</div>
+<div class="nb" id="nb">
+  <button id="pv" onclick="go(-1)">← Prev</button>
+  <div class="dots" id="dr"></div>
+  <button id="nx" onclick="go(1)">Next →</button>
 </div>
 
 <script>
-  const slides=document.querySelectorAll('.slide');
-  const total=slides.length;
-  let cur=0;
-  const snum=document.getElementById('snum');
-  const dotrow=document.getElementById('dotrow');
-  const prevB=document.getElementById('prev');
-  const nextB=document.getElementById('next');
-
-  for(let i=0;i<total;i++){
-    const d=document.createElement('div');
-    d.className='dot';d.onclick=()=>goTo(i);dotrow.appendChild(d);
-  }
-
-  function goTo(i){
-    slides[cur].classList.remove('active');
-    cur=Math.max(0,Math.min(total-1,i));
-    slides[cur].classList.add('active');
-    update();
-  }
-  function go(d){goTo(cur+d);}
-
-  function update(){
-    snum.textContent=(cur+1)+' / '+total;
-    document.querySelectorAll('.dot').forEach((d,i)=>{d.className='dot'+(i===cur?' active':'');});
-    prevB.style.opacity=cur===0?.3:1;
-    nextB.style.opacity=cur===total-1?.3:1;
-  }
-
-  document.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);
-    if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
-  });
-  let tx=0;
-  document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
-  document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>40)go(dx>0?1:-1);});
-  update();
+const sl=document.querySelectorAll('.slide');
+const tot=sl.length;
+let c=0;
+const sn=document.getElementById('sn');
+const dr=document.getElementById('dr');
+const pv=document.getElementById('pv');
+const nx=document.getElementById('nx');
+for(let i=0;i<tot;i++){const d=document.createElement('div');d.className='dot';d.onclick=()=>gt(i);dr.appendChild(d);}
+function gt(i){sl[c].classList.remove('active');c=Math.max(0,Math.min(tot-1,i));sl[c].classList.add('active');up();}
+function go(d){gt(c+d);}
+function up(){
+  sn.textContent=(c+1)+' / '+tot;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.className='dot'+(i===c?' active':''));
+  pv.style.opacity=c===0?.3:1;
+  nx.style.opacity=c===tot-1?.3:1;
+}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>40)go(dx>0?1:-1);});
+up();
 </script>
 </body>
 </html>
